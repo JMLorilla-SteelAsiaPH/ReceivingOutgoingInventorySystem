@@ -130,8 +130,8 @@ namespace ROIS.Forms
                         //select.LocationId = (int)rdr["LocationID"];
                         select.FileNo = rdr["FileNo"].ToString();
                         select.BundleNo = rdr["BundleNo"].ToString();
-                        select.Qty = (float)rdr["Qty"];
-                        select.TotalWeight = (float)rdr["TotalWT"];
+                        select.Qty = (double)rdr["Qty"];
+                        select.TotalWeight = (double)rdr["TotalWT"];
 
                         select_list.Add(select);
                     }

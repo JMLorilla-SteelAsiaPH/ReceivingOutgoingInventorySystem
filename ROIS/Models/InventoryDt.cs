@@ -12,7 +12,7 @@ namespace ROIS.Models
         public int LocationId { get; set; }
         public string FileNo { get; set; }
         public string BundleNo { get; set; }
-        public float Qty { get; set; }
-        public float TotalWeight { get; set; }
+        public double Qty { get; set; }
+        public double TotalWeight { get; set; }
     }
 }
