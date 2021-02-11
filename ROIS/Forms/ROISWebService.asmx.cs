@@ -127,7 +127,7 @@ namespace ROIS.Forms
                     {
                         select.RefNo = rdr["RefNo"].ToString();
                         select.ProdCode = rdr["ProdCode"].ToString();
-                        select.LocationId = (int)rdr["LocationID"];
+                        //select.LocationId = (int)rdr["LocationID"];
                         select.FileNo = rdr["FileNo"].ToString();
                         select.BundleNo = rdr["BundleNo"].ToString();
                         select.Qty = (float)rdr["Qty"];
