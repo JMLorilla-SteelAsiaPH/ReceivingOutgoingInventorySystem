@@ -399,6 +399,7 @@
                     if (this.status >= 200 && this.status < 400) {
                         // Success!
                         swal("Receiving Data Recorded");
+                        clearForm();
                     } else {
                         console.log(this.response);
                     }
@@ -481,6 +482,16 @@
            };
 
            request.send(data);
+       }
+
+       function clearForm() {
+           document.getElementById("#txtBarcode").value = "";
+           document.getElementById("txtRefNo").value = "";
+           document.getElementById("txtProdCode").value = "";
+           document.getElementById("txtFileNo").value = "";
+           document.getElementById("txtBundleNo").value = "";
+           document.getElementById("txtLocID").value = "";
+           document.getElementById("txtQty").value = 0;
        }
 
        function load_ITRLT_posted_subdetails(scanned_barcode) {

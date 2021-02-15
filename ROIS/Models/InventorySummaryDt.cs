@@ -7,9 +7,9 @@ namespace ROIS.Models
 {
     public class InventorySummaryDt
     {
-        public string prod_code;
-        public string location;
-        public double quantity;
-        public double weight;
+        public string prod_code { get; set; }
+        public string location { get; set; }
+        public double quantity { get; set; }
+        public double weight { get; set; }
     }
 }
