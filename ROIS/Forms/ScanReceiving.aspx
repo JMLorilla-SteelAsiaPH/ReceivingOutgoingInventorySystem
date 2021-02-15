@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Forms/Site.Master" AutoEventWireup="true" CodeBehind="ScanReceiving.aspx.cs" Inherits="ROIS.Forms.WebForm2" %>
+﻿ <%@ Page Title="" Language="C#" MasterPageFile="~/Forms/Site.Master" AutoEventWireup="true" CodeBehind="ScanReceiving.aspx.cs" Inherits="ROIS.Forms.WebForm2" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <link href="../css/upload_style.css" rel="stylesheet" />
@@ -91,8 +91,6 @@
                             <input type="text" class="form-control m-input" id="txtFileNo" placeholder="File No." disabled="disabled">
                         </div>
                     </div>
-
-
 
                     <div class="form-group m-form__group row">
                         <label for="example-bundleno-input" class="col-3 col-form-label">Bundle No.</label>
@@ -375,8 +373,7 @@
         $(document).ready(function () {
             $('#btnEdit1').hide();
             $('.progress').hide();
-            
-            //var loc = sessionStorage.getItem("location");
+            $('#btnReceive').prop("disabled", true);
 
             $('#btnReceive').click(function () {
                 var employee = sessionStorage.getItem("userId");
@@ -401,7 +398,7 @@
                 request.onload = function () {
                     if (this.status >= 200 && this.status < 400) {
                         // Success!
-                        swal("Receiving Data Saved");
+                        swal("Receiving Data Recorded");
                     } else {
                         console.log(this.response);
                     }
@@ -417,13 +414,8 @@
             $('#txtBarcode').blur(function () {
                 var varBarcodeTag = $('#txtBarcode').val();
                 if (varBarcodeTag != '') {
-                    load_ITRLT_posted_subdetails(varBarcodeTag);
+                    check_barcode_if_exists(varBarcodeTag);
                 }
-            });
-
-            $('#submitBarcode').click(function () {
-                var test = $('#txtBarcode').val();
-                load_ITRLT_posted_subdetails(test);
             });
 
             $('#btnScan').click(function () {
@@ -450,14 +442,46 @@
 
             Quagga.onDetected(function (result) {
                 var code = result.codeResult.code;
-                $('#txtSWIV').val(code);
+                $('#txtBarcode').val(code);
                 $('#modal_scan').modal('hide');
-                loadSWIV($('#txtSWIV').val());
+                check_barcode_if_exists($('#txtBarcode').val());
                 Quagga.stop();
                 console.log("Stop camera.");
             });
 
         });
+
+       function check_barcode_if_exists(scanned_barcode) {
+           var request = new XMLHttpRequest();
+           var data = JSON.stringify({ scannedBarcode: scanned_barcode, transType: 1 });
+           request.open('POST', 'ROISWebService.asmx/CheckIfBarcodeExists', true);
+           request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+           request.onload = function () {
+               if (this.status >= 200 && this.status < 400) {
+                   // Success!
+                   var result = JSON.parse(this.responseText);
+
+                   if (result > 0) {
+                       swal("Data already exists on records.");
+                       $('#btnReceive').prop("disabled", true);
+                   }
+                   else {
+                       load_ITRLT_posted_subdetails(scanned_barcode);
+                   }
+               } else {
+                   // We reached our target server, but it returned an error
+                   console.log("Status Error");
+               }
+           };
+
+           request.onerror = function () {
+               //console.log(this.response);
+               console.log("Request OnError");
+           };
+
+           request.send(data);
+       }
 
        function load_ITRLT_posted_subdetails(scanned_barcode) {
            var request = new XMLHttpRequest();
@@ -477,13 +501,10 @@
                        document.getElementById("txtBundleNo").value = subdetails[0].bundlenumber;
                        document.getElementById("txtLocID").value = subdetails[0].locationcode;
                        document.getElementById("txtQty").value = subdetails[0].quantity;
+                       $('#btnReceive').prop("disabled", false);
                    } else {
-                       document.getElementById("txtRefNo").value = "";
-                       document.getElementById("txtProdCode").value = "";
-                       document.getElementById("txtFileNo").value = "";
-                       document.getElementById("txtBundleNo").value = "";
-                       document.getElementById("txtLocID").value = "";
-                       document.getElementById("txtQty").value = 0;
+                       swal("Data does not exist from source records.");
+                       $('#btnReceive').prop("disabled", true);
                    }
                } else {
                    // We reached our target server, but it returned an error

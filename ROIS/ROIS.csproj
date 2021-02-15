@@ -1406,6 +1406,7 @@
       <DependentUpon>ITRPostedDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\InventoryDt.cs" />
+    <Compile Include="Models\InventorySummaryDt.cs" />
     <Compile Include="Models\ITRLTPostedSubdetails.cs" />
     <Compile Include="Models\LoginAuthResult.cs" />
     <Compile Include="Models\Outgoing.cs" />

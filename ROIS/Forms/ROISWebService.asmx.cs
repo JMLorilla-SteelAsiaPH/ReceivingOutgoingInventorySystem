@@ -75,6 +75,74 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
+        public void InsertOutgoingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passBundleNo, int passLocId, string passQty, int passLastUser)
+        {
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("usp_outgoing_insert", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", passId);
+                    cmd.Parameters.AddWithValue("@RefNo", passRefNo);
+                    cmd.Parameters.AddWithValue("@ProdCode", passProdCd);
+                    cmd.Parameters.AddWithValue("@FileNo", passFileNo);
+                    cmd.Parameters.AddWithValue("@BundleNo", passBundleNo);
+                    cmd.Parameters.AddWithValue("@LocationID", passLocId);
+                    cmd.Parameters.AddWithValue("@Qty", passQty);
+                    cmd.Parameters.AddWithValue("@LastUser", passLastUser);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+        }
+
+        [WebMethod]
+        public void CheckIfBarcodeExists(int transType, string scannedBarcode)
+        {
+            int x = 0;
+
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("usp_check_if_existing", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@TransactionType", transType);
+                    cmd.Parameters.AddWithValue("@ScannedBarcodeTag", scannedBarcode);
+
+                    con.Open();
+                    x = (int)cmd.ExecuteScalar();
+                }
+                catch(SqlException ex)
+                {
+
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.ContentType = "text/event-stream";
+            Context.Response.Write(js.Serialize(x));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
         public void InsertReceivingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passBundleNo, string passQty, int passLastUser)
         {
             using (SqlConnection con = new SqlConnection(rois_connstring))
@@ -104,6 +172,51 @@ namespace ROIS.Forms
                     con.Dispose();
                 }
             }
+        }
+
+        [WebMethod]
+        public void GenerateInventorySummaryDt()
+        {
+            List<InventorySummaryDt> select_list = new List<InventorySummaryDt>();
+            InventorySummaryDt select = new InventorySummaryDt();
+
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM uvw_generate_inventory_summary", con);
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandType = CommandType.Text;
+
+                    con.Open();
+
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        select.prod_code = rdr["prod_code"].ToString();
+                        select.location = rdr["location_desc"].ToString();
+                        select.quantity = (double)rdr["quantity"];
+                        select.weight = (double)rdr["wt"];
+                        select_list.Add(select);
+                    }
+                }
+                catch (SqlException ex)
+                {
+
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.ContentType = "text/event-stream";
+            Context.Response.Write(js.Serialize(select_list));
+            Context.Response.Flush();
+            Context.Response.End();
         }
 
         [WebMethod]

@@ -10,7 +10,7 @@ namespace ROIS.Models
         public string barcodetag { get; set; }
         public string referenceno { get; set; }
         public string prodcode { get; set; }
-        public string locationcode { get; set; }
+        public int locationid { get; set; }
         public string filenumber { get; set; }
         public string bundlenumber { get; set; }
         public double quantity { get; set; }

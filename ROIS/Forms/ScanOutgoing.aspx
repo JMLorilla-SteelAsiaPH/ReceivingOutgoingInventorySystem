@@ -83,12 +83,6 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <label for="example-locid-input" class="col-3 col-form-label">Location ID</label>
-                        <div class="col-3">
-                            <input type="text" class="form-control m-input" id="txtLocID" placeholder="Location ID" disabled="disabled">
-                        </div>
-                    </div>
-                    <div class="form-group m-form__group row">
                         <label for="example-fileno-input" class="col-3 col-form-label">File No.</label>
                         <div class="col-9">
                             <input type="text" class="form-control m-input" id="txtFileNo" placeholder="File No." disabled="disabled">
@@ -117,9 +111,16 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <label for="example-qty-input" class="col-3 col-form-label">Tonnage:</label>
+                        <label for="example-qty-input" class="col-3 col-form-label">Location:</label>
                         <div class="col-5">
-                            <input type="number" class="form-control m-input" id="txtTonnage">
+                            <select class="form-control m-input" id="selectLocation">
+                                <option value="1">HO</option>
+                                <option value="2">M1</option>
+                                <option value="3">M3</option>
+                                <option value="4">M4</option>
+                                <option value="5">M5</option>
+                                <option value="6">M6</option>
+                            </select>
                         </div>
                     </div>
 
@@ -386,29 +387,93 @@
     <!--end::Modal-->
 
    <script>
+//import { to } from "../vendors/moment/src/lib/moment/to";
+//import toInt from "../vendors/moment/src/lib/utils/to-int";
+
         $(document).ready(function () {
             $('#btnEdit1').hide();
             $('.progress').hide();
             var employee = sessionStorage.getItem("username");
             var loc = sessionStorage.getItem("location");
+            $('#btnSend').prop("disabled", true);
 
             $('#txtBarcode').blur(function () {
                 var varBarcodeTag = $('#txtBarcode').val();
                 if (varBarcodeTag != '') {
                     scanBarcode(varBarcodeTag);
+                    //check_barcode_if_exists(varBarcodeTag);
                 }
             });
 
-            function outgoingData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argTonnage,argLastUser) {
+            $('#btnSend').click(function () {
+                var employee = sessionStorage.getItem("userId");
+
+                let argId = $('#txtBarcode').val();
+                let argRefNo = $("#txtRefNo").val();
+                let argProdCd = $("#txtProdCode").val();
+                let argFileNo = $("#txtFileNo").val();
+                let argBundleNo = $("#txtBundleNo").val();
+                let argLocId = $("#selectLocation").val();
+                let argQty = $("#txtQtyOut").val();
+
+                let num1 = parseInt($("#txtQtyOut").val());
+                let num2 = parseInt($("#txtQty").val());
+                let argLastUser = employee;
+
+                if (argQty <= 0) {
+                    swal("You cannot enter a zero or negative quantity. Please try again.");
+                }
+                else if (num1 > num2) {
+                    swal("The product does not have enough stock.");
+                }
+                else {
+                    outgoingData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argLocId, argQty, argLastUser);
+                    clearForm();
+                }
+            });
+
+            //function check_barcode_if_exists(scanned_barcode) {
+            //    var request = new XMLHttpRequest();
+            //    var data = JSON.stringify({ scannedBarcode: scanned_barcode, transType: 2 });
+            //    request.open('POST', 'ROISWebService.asmx/CheckIfBarcodeExists', true);
+            //    request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+            //    request.onload = function () {
+            //        if (this.status >= 200 && this.status < 400) {
+            //            // Success!
+            //            var result = JSON.parse(this.responseText);
+
+            //            if (result > 0) {
+            //                swal("Data already exists on records.");
+            //                $('#btnSend').prop("disabled", true);
+            //            }
+            //            else {
+            //                scanBarcode(scanned_barcode);
+            //            }
+            //        } else {
+            //            // We reached our target server, but it returned an error
+            //            console.log("Status Error");
+            //        }
+            //    };
+
+            //    request.onerror = function () {
+            //        //console.log(this.response);
+            //        console.log("Request OnError");
+            //    };
+
+            //    request.send(data);
+            //}
+
+            function outgoingData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argLocId, argQty, argLastUser) {
                 var request = new XMLHttpRequest();
-                var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passBundleNo: argBundleNo, passQty: argQty, passTonnage: argTonnage, passLastUser: argLastUser });
-                request.open('POST', 'ROISWebService.asmx/InsertReceivingData', true);
+                var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passBundleNo: argBundleNo, passLocId: argLocId, passQty: argQty, passLastUser: argLastUser });
+                request.open('POST', 'ROISWebService.asmx/InsertOutgoingData', true);
                 request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
                 request.onload = function () {
                     if (this.status >= 200 && this.status < 400) {
                         // Success!
-                        swal("Receiving Data Saved");
+                        swal("Outgoing Data Recorded");
                     } else {
                         console.log(this.response);
                     }
@@ -419,6 +484,18 @@
                 };
 
                 request.send(data);
+            }
+
+            function clearForm() {
+                document.getElementById("txtBarcode").value = "";
+                document.getElementById("txtRefNo").value = "";
+                document.getElementById("txtProdCode").value = "";
+                document.getElementById("txtFileNo").value = "";
+                document.getElementById("txtBundleNo").value = "";
+                //document.getElementById("txtLocID").value = 1;
+                document.getElementById("txtQty").value = 0;
+                document.getElementById("txtQtyOut").value = 0;
+                document.getElementById("btnSend").disabled = true;
             }
 
             $('#btnScan').click(function () {
@@ -447,14 +524,20 @@
 
             Quagga.onDetected(function (result) {
                 var code = result.codeResult.code;
-                $('#txtSWIV').val(code);
+                $('#txtBarcode').val(code);
                 $('#modal_scan').modal('hide');
-                load_ITRLT_posted_subdetails($('#txtBarcode').val());
+                let scannedBarcode = $('#txtBarcode').val();
+                //check_barcode_if_exists(scannedBarcode);
+                scanBarcode(scannedBarcode);
                 Quagga.stop();
                 console.log("Stop camera.");
             });
 
         });
+
+       function locationDropDown() {
+           //To be written
+       }
 
        function scanBarcode(scanned_barcode) {
            var request = new XMLHttpRequest();
@@ -474,15 +557,11 @@
                        document.getElementById("txtBundleNo").value = subdetails[0].bundlenumber;
                        //document.getElementById("txtLocID").value = subdetails[0].locationcode;
                        document.getElementById("txtQty").value = subdetails[0].quantity;
+                       $('#btnSend').prop("disabled", false);
 
                    } else {
-                       document.getElementById("txtRefNo").value = "";
-                       document.getElementById("txtProdCode").value = "";
-                       document.getElementById("txtFileNo").value = "";
-                       document.getElementById("txtBundleNo").value = "";
-                       document.getElementById("txtLocID").value = "";
-                       document.getElementById("txtQty").value = 0;
-
+                       swal("Data does not exist from source records.");
+                       $('#btnSend').prop("disabled", true);
                    }
                } else {
                    // We reached our target server, but it returned an error

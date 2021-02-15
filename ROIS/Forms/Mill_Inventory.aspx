@@ -24,14 +24,10 @@
                         <table id="dgrid" class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline collapsed" role="grid">
                             <thead>
                                 <tr>
-                                    <th>Ref No.</th>
                                     <th>Product Code</th>
-                                    <th>Product Code</th>
-                                    <th>Location ID</th>
-                                    <th>File No.</th>
-                                    <th>Bundle No.</th>
+                                    <th>Location</th>
                                     <th>Qty.</th>
-                                    <th>Total Weight</th>
+                                    <th>Weight</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -116,7 +112,7 @@
 
         function loadGrid() {
             $.ajax({
-                url: 'ROISWebService.asmx/GenerateInventoryDt',
+                url: 'ROISWebService.asmx/GenerateInventorySummaryDt',
                 method: 'post',
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
@@ -126,13 +122,10 @@
                         data: data,
                         bDestroy: true,
                         columns: [
-                            { 'data': 'RefNo' },
-                            { 'data': 'ProdCode' },
-                            { 'data': 'LocationId' },
-                            { 'data': 'FileNo' },
-                            { 'data': 'BundleNo' },
-                            { 'data': 'Qty' },
-                            { 'data': 'TotalWeight' }
+                            { 'data': 'prod_code' },
+                            { 'data': 'location' },
+                            { 'data': 'quantity' },
+                            { 'data': 'weight' },
                         ],
 
                         order: [[0, "asc"]],
