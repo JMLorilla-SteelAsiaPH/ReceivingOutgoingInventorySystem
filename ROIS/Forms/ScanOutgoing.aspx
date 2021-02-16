@@ -114,12 +114,6 @@
                         <label for="example-qty-input" class="col-3 col-form-label">Location:</label>
                         <div class="col-5">
                             <select class="form-control m-input" id="selectLocation">
-                                <option value="1">HO</option>
-                                <option value="2">M1</option>
-                                <option value="3">M3</option>
-                                <option value="4">M4</option>
-                                <option value="5">M5</option>
-                                <option value="6">M6</option>
                             </select>
                         </div>
                     </div>
@@ -390,7 +384,8 @@
 //import { to } from "../vendors/moment/src/lib/moment/to";
 //import toInt from "../vendors/moment/src/lib/utils/to-int";
 
-        $(document).ready(function () {
+       $(document).ready(function () {
+           locationDropDown();
             $('#btnEdit1').hide();
             $('.progress').hide();
             var employee = sessionStorage.getItem("username");
@@ -474,6 +469,7 @@
                     if (this.status >= 200 && this.status < 400) {
                         // Success!
                         swal("Outgoing Data Recorded");
+                        clearForm();
                     } else {
                         console.log(this.response);
                     }
@@ -536,7 +532,34 @@
         });
 
        function locationDropDown() {
-           //To be written
+           let i = 0;
+           let sel = document.getElementById("selectLocation");
+
+           var request = new XMLHttpRequest();
+           request.open('POST', 'ROISWebService.asmx/GetDropDownData');
+           request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+           request.onload = function () {
+               if (this.status >= 200 && this.status < 400) {
+                   var location = JSON.parse(this.responseText);
+
+                   for (i in location) {
+                       let opt = document.createElement("option");
+                       opt.appendChild(document.createTextNode(location[i].locationDesc));
+                       opt.value = location[i].locationDesc;
+                       sel.appendChild(opt);
+                   }
+               }
+               else {
+
+               }
+           };
+
+           request.onerror = function () {
+
+           };
+
+           request.send();
        }
 
        function scanBarcode(scanned_barcode) {
@@ -562,6 +585,7 @@
                    } else {
                        swal("Data does not exist from source records.");
                        $('#btnSend').prop("disabled", true);
+                       clearForm();
                    }
                } else {
                    // We reached our target server, but it returned an error

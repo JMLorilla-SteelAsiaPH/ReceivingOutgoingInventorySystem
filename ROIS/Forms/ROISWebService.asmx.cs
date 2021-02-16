@@ -75,6 +75,49 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
+        public void GetDropDownData()
+        {
+            List<LocationDropDown> select_list = new List<LocationDropDown>();
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("usp_get_location", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while(rdr.Read())
+                    {
+                        LocationDropDown select = new LocationDropDown();
+
+                        select.locationId = (int)rdr["location_id"];
+                        select.locationDesc = rdr["location_desc"].ToString();
+                        select.locationTo = rdr["location_to"].ToString();
+
+                        select_list.Add(select);
+                    }
+                }
+                catch(SqlException ex)
+                { 
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.ContentType = "text/event-stream";
+            Context.Response.Write(js.Serialize(select_list));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
         public void InsertOutgoingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passBundleNo, int passLocId, string passQty, int passLastUser)
         {
             using (SqlConnection con = new SqlConnection(rois_connstring))
@@ -178,15 +221,14 @@ namespace ROIS.Forms
         public void GenerateInventorySummaryDt()
         {
             List<InventorySummaryDt> select_list = new List<InventorySummaryDt>();
-            InventorySummaryDt select = new InventorySummaryDt();
 
             using (SqlConnection con = new SqlConnection(rois_connstring))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM uvw_generate_inventory_summary", con);
+                    SqlCommand cmd = new SqlCommand("SELECT prod_code, location_desc, CAST(quantity AS int) AS quantity, cast(wt AS varchar) AS wt FROM uvw_generate_inventory_summary", con);
                     //cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandType = CommandType.Text;
+                    //cmd.CommandType = CommandType.Text;
 
                     con.Open();
 
@@ -194,10 +236,13 @@ namespace ROIS.Forms
 
                     while (rdr.Read())
                     {
+                        InventorySummaryDt select = new InventorySummaryDt();
+
                         select.prod_code = rdr["prod_code"].ToString();
                         select.location = rdr["location_desc"].ToString();
-                        select.quantity = (double)rdr["quantity"];
-                        select.weight = (double)rdr["wt"];
+                        select.quantity = (int)rdr["quantity"];
+                        select.weight = rdr["wt"].ToString();
+
                         select_list.Add(select);
                     }
                 }

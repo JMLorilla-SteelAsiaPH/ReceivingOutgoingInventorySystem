@@ -7,13 +7,6 @@
                     <h3 class="m-portlet__head-text">Mill Inventory Summary(For Outgoing)</h3>
                 </div>
             </div>
-            <div class="m-portlet__head-tools">
-                <ul class="m-portlet__nav">
-                    <li class="m-portlet__nav-item">
-                        <button type="button" class="btn btn-accent" id="btnModal" style="visibility: hidden;">Insert PO</button>
-                    </li>
-                </ul>
-            </div>
         </div>
         <div class="m-portlet__body">
 
@@ -41,70 +34,6 @@
             </div>
         </div>
     </div>
-    <!--begin::Modal-->
-    <div class="modal fade" id="m_modal_5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">CVAL Local Entry</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="txtPONo" class="form-control-label">PO No:</label>
-                            <input type="text" class="form-control" id="txtPONo" />
-                        </div>
-                        <div class="form-group">
-                            <label for="txtCVAN" class="form-control-label">CVAN:</label>
-                            <textarea class="form-control" id="txtCVAN"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtSealNo" class="form-control-label">Seal No:</label>
-                            <textarea class="form-control" id="txtSealNo"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtWeight" class="form-control-label">Weight:</label>
-                             <input type="number" class="form-control form-control-lg m-input" id="txtWeight" name="txtWeight" placeholder="0" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="txtBLNo" class="form-control-label">Bill of Ladding:</label>
-                            <textarea class="form-control" id="txtBLNo"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtBLDate" class="form-control-label">BL Date:</label>
-                            <textarea class="form-control" id="txtBLDate"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="txtForwarder" class="form-control-label">Forwarder:</label>
-                            <textarea class="form-control" id="txtForwarder"></textarea>
-                        </div>
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    <%--       <a href="#" class="btn btn-warning m-btn m-btn--custom m-btn--icon">
-                        <span>
-                            <i class="fa fa-arrow-alt-circle-up"></i>
-                            <span>Move Up</span>
-                        </span>
-                    </a>--%>
-
-                    <div class="row">
-                        <button type="button" class="btn btn-primary" id="btnSave">Save</button>
-                        <%--<button type="button" class="btn btn-danger" id="btnDelete">Delete</button>--%>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--end::Modal-->
 
 <script>
     $(document).ready(function () {
@@ -125,7 +54,7 @@
                             { 'data': 'prod_code' },
                             { 'data': 'location' },
                             { 'data': 'quantity' },
-                            { 'data': 'weight' },
+                            { 'data': 'weight' }
                         ],
 
                         order: [[0, "asc"]],
@@ -137,89 +66,6 @@
 
             }); //end loadGrid
         }
-
-        $('#btnModal').click(function () {
-            $('#m_modal_5').modal('show');
-            $('#txtPONo').val('');
-            $('#txtCVAN').val('');
-            $('#txtSealNo').val('');
-            $('#txtWeight').val('');
-            $('#txtBLNo').val('');
-            $('#txtBLDte').val('');
-            $('#txtForwarder').val('');
-        });
-
-        function insertPO(pono, cvan, sealno, weight, bl, bldate, forwarder) {
-            $.ajax({
-                url: 'tqs_webservice.asmx/set_cvan_local',
-                method: 'post',
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
-                data: JSON.stringify({ pono:pono, cvan:cvan, sealno:sealno, weight:weight, bl:bl, bldate:bldate, forwarder:forwarder }),
-                success: function (data) {
-                    //alert(msg);
-                    console.log(data);
-
-                    swal("Save!", "This PO number was successfully saved.", "success");
-                    insert_logs('TQS', 'CVAN Import Local', 'Successully inserted PO.', '');
-                    $('#m_modal_5').modal('hide');
-
-                    loadGrid();
-                    //}
-                },
-                Error: function (data) {
-                    // notif_withtxt('Info', 'Error Please check your data', 'info', 'swing');
-                }
-            });
-
-
-        }
-
-        $('#btnSave').click(function () {
-
-            //swal("Warning!", "This plate number is already encoded.", "error");
-
-            var ponumber = $('#txtPONo').val();
-            var cvanno = $('#txtCVAN').val();
-            var seal = $('#txtSealNo').val();
-            var weight = $('#txtWeight').val();
-            var blno = $('#txtBLNo').val();
-            var bldate = $('#txtBLDate').val();
-            var forwarder = $('#txtForwarder').val();
-            //console.log("PO :" + ponumber + " CVAN :" + cvanno);
-
-            if (ponumber.trim() === "" || cvanno.trim() === "") {
-                swal("Warning!", "Invalid input. Please enter pono no and cvan.", "error");
-            }
-            else {
-                insertPO(ponumber,cvanno,seal,weight,blno,bldate,forwarder);
-            }
-
-        });
-
-
-         function insert_logs(transid, module, form, action) {
-                $.ajax({
-                    url: 'tqs_webservice.asmx/set_logs',
-                    method: 'post',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: 'json',
-                    data: JSON.stringify({ transid: transid, module: module, form: form, action: action, ip: sessionStorage.getItem("ipaddress") }),
-                    success: function (data) {
-                        //alert(msg);
-                        //console.log(data);
-                        //swal("Save!", "Transaction has been saved.", "success");
-                        //loadSWIV($('#txtSWIV').val());
-                        //$('#m_modal_5').modal('hide');
-
-                        //}
-                    },
-                    Error: function (data) {
-                        // notif_withtxt('Info', 'Error Please check your data', 'info', 'swing');
-                        //swal("Not Save!", "Error saving.", "warning");
-                    }
-                });
-            }
 
     });
 </script>
