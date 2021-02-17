@@ -17,9 +17,7 @@
 
                         <%--Barcode scanning button--%>
                         <a href="#" class="btn btn-outline-accent btn-lg m-btn m-btn--icon " id="btnScan" name="btnScan">
-
                             <i class="la la-barcode"></i>
-
                         </a>
                         <%--Barcode scanning button--%>
 
@@ -63,8 +61,6 @@
                             <ContentTemplate>--%>
                     <div class="form-group m-form__group row">
                         <div class="col-12">
-                            <%--<input type="text" class="form-control form-co-lg m-input m--icon-font-size-sm2 align-items-lg-start" id="txtSWIV" placeholder="Scan SWIV" />--%>
-                            <%--<asp:TextBox ID="txtSWIV"  class="form-control form-co-lg m-input m--icon-font-size-sm2 align-items-lg-start" placeholder="Scan SWIV" AutoPostBack="true" ></asp:TextBox>--%>
                         </div>
                     </div>
 
@@ -119,7 +115,7 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <button type="button" class=" col-3 btn btn-accent" id="btnSend">SEND OUT</button>
+                        <button type="button" class="btn btn-accent" id="btnSend">SEND OUT</button>
                         <div class="col-5">
                         </div>
                     </div>
@@ -131,53 +127,6 @@
         </div>
 
         <div class="col-md-6">
-
-            <!--begin::Portlet-->
-            <div class="m-portlet m-portlet--tab" style="visibility: hidden;">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-
-                            <h3 class="m-portlet__head-text m--align-center">Capture Image
-                            </h3>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="m-portlet__body font">
-                    <form id="form1">
-                        <div class="form-group m-form__group row">
-
-                            <input type="file" name="customFile" id="customFile" />
-
-                            <input class="btn btn-primary btn-block" type="button" id="btnUpload" name="btnUpload" value="Upload" />
-                        </div>
-                        <div class="form-group m-form__group row">
-
-                            <%--<progress id="fileProgress" style="display: none" class="progress-bar progress-bar-striped progress-bar-animated " aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></progress>--%>
-                        </div>
-                        <div class="m-section__content">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        <div class="form-group m-form__group row">
-                            <span id="lblMessage" style="color: Green"></span>
-                        </div>
-                    </form>
-
-                    <div class="form-group m-form__group row">
-
-                        <div id="thumb-output"></div>
-                    </div>
-                    <div class="form-group m-form__group row">
-                        <button class="btn btn-primary btn-block" id="btnViewImage">View Images</button>
-
-                    </div>
-                </div>
-            </div>
-            <!--end::Portlet-->
 
         </div>
 
@@ -251,7 +200,6 @@
                 }
                 else {
                     outgoingData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argLocId, argQty, argLastUser);
-                    clearForm();
                 }
             });
 
@@ -363,13 +311,13 @@
            let i = 0;
            let sel = document.getElementById("selectLocation");
 
-           var request = new XMLHttpRequest();
+           let request = new XMLHttpRequest();
            request.open('POST', 'ROISWebService.asmx/GetDropDownData');
            request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
            request.onload = function () {
                if (this.status >= 200 && this.status < 400) {
-                   var location = JSON.parse(this.responseText);
+                   let location = JSON.parse(this.responseText);
 
                    for (i in location) {
                        let opt = document.createElement("option");
@@ -439,5 +387,4 @@
     <script src="../scripts/adapter-latest.js"></script>
     <script src="../scripts/quagga.js"></script>
     <script src="../scripts/scale.fix.js"></script>
-</asp:Content>
-
+</asp:Content>  

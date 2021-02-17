@@ -118,6 +118,48 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
+        public void GetLoginSelectData()
+        {
+            List<LocationDropDown> select_list = new List<LocationDropDown>();
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SELECT location_id, location_desc FROM locations", con);
+                    cmd.CommandType = CommandType.Text;
+
+                    con.Open();
+
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        LocationDropDown select = new LocationDropDown();
+
+                        select.locationId = (int)rdr["location_id"];
+                        select.locationDesc = rdr["location_desc"].ToString();
+
+                        select_list.Add(select);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.ContentType = "text/event-stream";
+            Context.Response.Write(js.Serialize(select_list));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
         public void InsertOutgoingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passBundleNo, int passLocId, string passQty, int passLastUser)
         {
             using (SqlConnection con = new SqlConnection(rois_connstring))

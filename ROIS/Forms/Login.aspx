@@ -66,13 +66,15 @@
                                 <input class="form-control m-input m--align-center" type="text" placeholder="Enter Username" name="empid" autocomplete="off" id="empid" runat="server" />
                                 <input class="form-control m-input m--align-center" type="password" placeholder="Enter you password" name="txtPassword" autocomplete="off" id="txtPassword" runat="server" />
                                 <%--<asp:TextBox ID="empid" runat="server" class="form-control m-input m--align-center" type="text" placeholder="Employee ID"></asp:TextBox>--%>
-
+                                
                             </div>
                             <br /> 
                            <div class="form-group-lg m--align-center">
-                                       <button type="button" class="btn btn-focus m-btn m-btn--pill m--align-center m-btn--custom m-btn--air m-login__btn m-login__btn--primary " id="btnSubmit">
+                               <select class="form-control m-input m--align-center" id="selectLocation"></select>
+                               <br />
+                               <button type="button" class="btn btn-focus m-btn m-btn--pill m--align-center m-btn--custom m-btn--air m-login__btn m-login__btn--primary " id="btnSubmit">
                                     <span>Log in</span>
-                                 </button>
+                               </button>
                            </div>
                         
 
@@ -142,6 +144,8 @@
 
     <script>
         $(document).ready(function () {
+            getLocation();
+
             function checklogin(username, password) {
                 if (username != '' && password != '') {
                     $.ajax({
@@ -152,10 +156,12 @@
                         data: JSON.stringify({ username: username, userPass: password }),
                         success: function (data) {
                             let parseId = parseInt(data[0].AuthResult);
+                            let userLocId = $('#selectLocation').val();
 
                             if (parseId != null || parseId != 0) {
                                 sessionStorage.setItem("username", $('#empid').val())
                                 sessionStorage.setItem("userId", parseId);
+                                sessionStorage.setItem("userLocationId", userLocId);
                                 $(location).attr('href', 'Home.aspx')
                             }
                             else {
@@ -193,6 +199,37 @@
                 }
             });
         });
+
+        function getLocation() {
+            let i = 0;
+            let sel = document.getElementById("selectLocation");
+
+            let request = new XMLHttpRequest();
+            request.open('POST', 'ROISWebService.asmx/GetLoginSelectData');
+            request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+            request.onload = function () {
+                if (this.status >= 200 && this.status < 400) {
+                    let location = JSON.parse(this.responseText);
+
+                    for (i in location) {
+                        let opt = document.createElement("option");
+                        opt.appendChild(document.createTextNode(location[i].locationDesc));
+                        opt.value = location[i].locationId;
+                        sel.appendChild(opt);
+                    }
+                }
+                else {
+
+                }
+            };
+
+            request.onerror = function () {
+
+            };
+
+            request.send();
+        }
     </script>
 </body>
 </html>
