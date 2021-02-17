@@ -183,35 +183,6 @@
 
     </div>
 
-
-    <!--begin::Modal-->
-    <div class="modal fade" id="m_modal_5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Image Viewer</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <%--        <div class="form-group m-form__group row">--%>
-                    <div class="popup-gallery">
-                        <div class="popup-gallery" id="lightb">
-                        </div>
-                    </div>
-                    <%--</div>--%>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--end::Modal-->
-
     <!--begin::Modal-->
     <div class="modal fade" id="modal_scan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
@@ -223,83 +194,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <%--      <div class="controls">
-                        <fieldset class="input-group">
-                            <button class="stop">Stop</button>
-                        </fieldset>
-                        <fieldset class="reader-config-group">
-                            <label>
-                                <span>Barcode-Type</span>
-                                <select name="decoder_readers">
-                                    <option value="code_128" selected="selected">Code 128</option>
-                                    <option value="code_39">Code 39</option>
-                                    <option value="code_39_vin">Code 39 VIN</option>
-                                    <option value="ean">EAN</option>
-                                    <option value="ean_extended">EAN-extended</option>
-                                    <option value="ean_8">EAN-8</option>
-                                    <option value="upc">UPC</option>
-                                    <option value="upc_e">UPC-E</option>
-                                    <option value="codabar">Codabar</option>
-                                    <option value="i2of5">Interleaved 2 of 5</option>
-                                    <option value="2of5">Standard 2 of 5</option>
-                                    <option value="code_93">Code 93</option>
-                                </select>
-                            </label>
-                            <label>
-                                <span>Resolution (width)</span>
-                                <select name="input-stream_constraints">
-                                    <option selected="selected" value="320x240">320px</option>
-    
-                                   <option value="640x480">640px</option>
-                                    <option value="800x600">800px</option>
-                                    <option value="1280x720">1280px</option>
-                                    <option value="1600x960">1600px</option>
-                                    <option value="1920x1080">1920px</option>
-                                </select>
-                            </label>
-                            <label>
-                                <span>Patch-Size</span>
-                                <select name="locator_patch-size">
-                                    <option value="x-small">x-small</option>
-                                    <option value="small">small</option>
-                                    <option selected="selected" value="medium">medium</option>
-                                    <option value="large">large</option>
-                                    <option value="x-large">x-large</option>
-                                </select>
-                            </label>
-                            <label>
-                                <span>Half-Sample</span>
-                                <input type="checkbox" checked="checked" name="locator_half-sample" />
-                            </label>
-                            <label>
-                                <span>Workers</span>
-                                <select name="numOfWorkers">
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option selected="selected" value="4">4</option>
-                                    <option value="8">8</option>
-                                </select>
-                            </label>
-                            <label>
-                                <span>Camera</span>
-                                <select name="input-stream_constraints" id="deviceSelection">
-                                </select>
-                            </label>
-                            <label style="display: none">
-                                <span>Zoom</span>
-                                <select name="settings_zoom"></select>
-                            </label>
-                            <label style="display: none">
-                                <span>Torch</span>
-                                <input type="checkbox" name="settings_torch" />
-                            </label>
-                       </fieldset>
-                    </div>
-                    <div id="result_strip">
-                        <ul class="thumbnails"></ul>
-                        <ul class="collector"></ul>
-                    </div>--%>
                     <div id="interactive" class="viewport"></div>
 
                 </div>
@@ -308,72 +202,6 @@
                 </div>
 
 
-            </div>
-        </div>
-    </div>
-
-    <!--end::Modal-->
-
-    <!--begin::Modal-->
-    <div class="modal fade" id="m_modal_6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Truck Details</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-radiation-input" class="col-3 col-form-label">Radiation</label>
-                        <div class="col-9">
-                            <input type="text" class="form-control m-input" id="txtRadiation3" placeholder="WNVicinity">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-radiation-input" class="col-3 col-form-label"></label>
-                        <div class="col-9">
-                            <input type="text" class="form-control m-input" id="txtRadiation4" placeholder="WNTruck">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-density-input" class="col-3 col-form-label">Density</label>
-                        <div class="col-9">
-                            <input type="text" class="form-control m-input" id="txtDensity2" placeholder="Density" disabled="disabled">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-length-input" class="col-3 col-form-label">Length</label>
-                        <div class="col-9">
-                            <input type="number" class="form-control m-input" id="txtLength2" placeholder="Length">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-width-input" class="col-3 col-form-label">Width</label>
-                        <div class="col-9">
-                            <input type="number" class="form-control m-input" id="txtWidth2" placeholder="Width">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-height-input" class="col-3 col-form-label">Height</label>
-                        <div class="col-9">
-                            <input type="number" class="form-control m-input" id="txtHeight2" placeholder="Height">
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <%--<button type="button" class="btn btn-danger" id="btnDelete">Delete</button>--%>
-                        <button type="button" class="btn btn-primary" id="btnSaveTruckDetails">Save</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -546,7 +374,7 @@
                    for (i in location) {
                        let opt = document.createElement("option");
                        opt.appendChild(document.createTextNode(location[i].locationDesc));
-                       opt.value = location[i].locationDesc;
+                       opt.value = location[i].locationId;
                        sel.appendChild(opt);
                    }
                }
