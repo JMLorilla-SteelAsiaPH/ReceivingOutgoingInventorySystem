@@ -14,8 +14,9 @@
     }
 
     function locationDropDownReceiving() {
-        let employee = sessionStorage.getItem("userId");
-        let data = JSON.stringify({ currUserId: employee });
+        //let employee = sessionStorage.getItem("userId");
+        let currentUserLoc = sessionStorage.getItem("userLocDesc");
+        let data = JSON.stringify({ currUserLoc: currentUserLoc });
         let request = new XMLHttpRequest();
         request.open('POST', 'ROISWebService.asmx/GetDropDownData');
         request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');

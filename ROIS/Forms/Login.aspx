@@ -188,7 +188,7 @@
             $('#txtPassword').keyup(function (event) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode == '13') {
-                    checklogin($('#empid').val(), $('#txtPassword').val())
+                    checklogin($('#empid').val(), $('#txtPassword').val(), $('#selectLocation option:selected').text())
                 }
             });
 
@@ -196,7 +196,7 @@
             $('#empid').keyup(function (event) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode == '13') {
-                    checklogin($('#empid').val(), $('#txtPassword').val())
+                    checklogin($('#empid').val(), $('#txtPassword').val(), $('#selectLocation option:selected').text())
                 }
             });
         });

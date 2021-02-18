@@ -75,7 +75,7 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void GetDropDownData(int currUserId)
+        public void GetDropDownData(string currUserLoc)
         {
             List<LocationDropDown> select_list = new List<LocationDropDown>();
             using (SqlConnection con = new SqlConnection(rois_connstring))
@@ -85,7 +85,7 @@ namespace ROIS.Forms
                     //SqlCommand cmd = new SqlCommand("usp_get_location", con);
                     SqlCommand cmd = new SqlCommand("usp_test_sp", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    //cmd.Parameters.AddWithValue("@UserId", currUserId);
+                    cmd.Parameters.AddWithValue("@myUserLocationDesc", currUserLoc);
                     con.Open();
 
                     SqlDataReader rdr = cmd.ExecuteReader();
