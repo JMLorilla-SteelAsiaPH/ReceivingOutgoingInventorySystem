@@ -110,6 +110,7 @@
                         <label for="example-qty-input" class="col-3 col-form-label">Location:</label>
                         <div class="col-5">
                             <select class="form-control m-input" id="selectLocation">
+                                <option value="0">--SELECT--</option>
                             </select>
                         </div>
                     </div>
@@ -167,17 +168,11 @@
             $('#btnReceive').prop("disabled", true);
 
             $('#btnReceive').click(function () {
-                var employee = sessionStorage.getItem("userId");
+                let confirmPrompt = confirm("Are you sure that you want to record the following information?");
 
-                let argId = $('#txtBarcode').val();
-                let argRefNo = $("#txtRefNo").val();
-                let argProdCd = $("#txtProdCode").val();
-                let argFileNo = $("#txtFileNo").val();
-                let argBundleNo = $("#txtBundleNo").val();
-                let argQty = $("#txtQty").val();
-                let argLastUser = employee;
-
-                receiveData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argLastUser);
+                if (confirmPrompt == true) {
+                    confirmInsertion();
+                }
             });
 
             function receiveData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argLastUser) {
@@ -201,7 +196,21 @@
                 };
 
                 request.send(data);
-            }
+           }
+
+           function confirmInsertion() {
+               var employee = sessionStorage.getItem("userId");
+
+               let argId = $('#txtBarcode').val();
+               let argRefNo = $("#txtRefNo").val();
+               let argProdCd = $("#txtProdCode").val();
+               let argFileNo = $("#txtFileNo").val();
+               let argBundleNo = $("#txtBundleNo").val();
+               let argQty = $("#txtQty").val();
+               let argLastUser = employee;
+
+               receiveData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argLastUser);
+           }
 
             $('#txtBarcode').blur(function () {
                 var varBarcodeTag = $('#txtBarcode').val();
@@ -244,35 +253,21 @@
         });
 
        function locationDropDown() {
-           let i = 0;
+           let fromLocalStorage = JSON.parse(localStorage.getItem("locDropDownOptions"));
            let sel = document.getElementById("selectLocation");
-           let employee = sessionStorage.getItem("userId");
-           let data = JSON.stringify({ currUserId : employee });
-           let request = new XMLHttpRequest();
-           request.open('POST', 'ROISWebService.asmx/GetDropDownData');
-           request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
-           request.onload = function () {
-               if (this.status >= 200 && this.status < 400) {
-                   let location = JSON.parse(this.responseText);
-
-                   for (i in location) {
-                       let opt = document.createElement("option");
-                       opt.appendChild(document.createTextNode(location[i].locationDesc));
-                       opt.value = location[i].locationId;
-                       sel.appendChild(opt);
-                   }
-               }
-               else {
-
-               }
-           };
-
-           request.onerror = function () {
-
-           };
-
-           request.send(data);
+           if (!fromLocalStorage) {
+               $(location).attr('href', 'Home.aspx');
+           }
+           else {
+               console.log(!fromLocalStorage);
+               for (i in fromLocalStorage) {
+                    let opt = document.createElement("option");
+                    opt.appendChild(document.createTextNode(fromLocalStorage[i].locationDesc));
+                    opt.value = fromLocalStorage[i].locationId;
+                    sel.appendChild(opt);
+                }
+           }
        }
 
        function check_barcode_if_exists(scanned_barcode) {

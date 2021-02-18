@@ -320,34 +320,21 @@
         });
 
        function locationDropDown() {
-           let i = 0;
+           let fromLocalStorage = JSON.parse(localStorage.getItem("locDropDownOptions"));
            let sel = document.getElementById("selectLocation");
 
-           let request = new XMLHttpRequest();
-           request.open('POST', 'ROISWebService.asmx/GetDropDownData');
-           request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-           request.onload = function () {
-               if (this.status >= 200 && this.status < 400) {
-                   let location = JSON.parse(this.responseText);
-
-                   for (i in location) {
-                       let opt = document.createElement("option");
-                       opt.appendChild(document.createTextNode(location[i].locationDesc));
-                       opt.value = location[i].locationId;
-                       sel.appendChild(opt);
-                   }
+           if (!fromLocalStorage) {
+               $(location).attr('href', 'Home.aspx');
+           }
+           else {
+               console.log(!fromLocalStorage);
+               for (i in fromLocalStorage) {
+                   let opt = document.createElement("option");
+                   opt.appendChild(document.createTextNode(fromLocalStorage[i].locationDesc));
+                   opt.value = fromLocalStorage[i].locationId;
+                   sel.appendChild(opt);
                }
-               else {
-
-               }
-           };
-
-           request.onerror = function () {
-
-           };
-
-           request.send();
+           }
        }
 
        function scanBarcode(scanned_barcode) {

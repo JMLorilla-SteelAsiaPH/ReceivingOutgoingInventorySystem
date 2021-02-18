@@ -82,9 +82,10 @@ namespace ROIS.Forms
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("usp_get_location", con);
+                    //SqlCommand cmd = new SqlCommand("usp_get_location", con);
+                    SqlCommand cmd = new SqlCommand("usp_test_sp", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@UserId", currUserId);
+                    //cmd.Parameters.AddWithValue("@UserId", currUserId);
                     con.Open();
 
                     SqlDataReader rdr = cmd.ExecuteReader();
@@ -94,7 +95,7 @@ namespace ROIS.Forms
                         LocationDropDown select = new LocationDropDown();
 
                         select.locationId = (int)rdr["location_id"];
-                        select.locationDesc = rdr["location_to"].ToString();
+                        select.locationDesc = rdr["location_desc"].ToString();
                         //select.locationTo = rdr["location_to"].ToString();
 
                         select_list.Add(select);
