@@ -40,11 +40,14 @@
         loadGrid();
 
         function loadGrid() {
+            let locationDesc = sessionStorage.getItem("userLocDesc");
+
             $.ajax({
                 url: 'ROISWebService.asmx/GenerateInventorySummaryDt',
                 method: 'post',
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
+                data: JSON.stringify({userLocationDesc : locationDesc}),
                 success: function (data) {
                     $('#dgrid').dataTable({
                         responsive: true,

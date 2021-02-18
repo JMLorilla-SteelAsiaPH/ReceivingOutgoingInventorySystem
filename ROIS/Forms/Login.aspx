@@ -146,23 +146,24 @@
         $(document).ready(function () {
             getLocation();
 
-            function checklogin(username, password) {
+            function checklogin(username, password, userlocation) {
                 if (username != '' && password != '') {
                     $.ajax({
                         url: 'ROISWebService.asmx/UserAuthentication',
                         method: 'post',
                         contentType: "application/json; charset=utf-8",
                         dataType: 'json',
-                        data: JSON.stringify({ username: username, userPass: password }),
+                        data: JSON.stringify({ username: username, userPass: password, userLocation: userlocation }),
                         success: function (data) {
-                            let parseId = parseInt(data[0].AuthResult);
+                            let parseId = data[0].AuthResult;
                             let userLocId = $('#selectLocation').val();
 
-                            if (parseId != null || parseId != 0) {
+                            if (parseId != 0) {
                                 sessionStorage.setItem("username", $('#empid').val())
                                 sessionStorage.setItem("userId", parseId);
                                 sessionStorage.setItem("userLocationId", userLocId);
-                                $(location).attr('href', 'Home.aspx')
+                                sessionStorage.setItem("userLocDesc", userlocation);
+                                $(location).attr('href', 'Home.aspx');
                             }
                             else {
                                 swal("Login Failed!", "Kindly try again!", "error");
@@ -180,7 +181,7 @@
             }
 
             $('#btnSubmit').click(function () {
-                checklogin($('#empid').val(), $('#txtPassword').val())
+                checklogin($('#empid').val(), $('#txtPassword').val(), $('#selectLocation option:selected').text())
             });
 
 

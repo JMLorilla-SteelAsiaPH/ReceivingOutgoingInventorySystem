@@ -9,7 +9,7 @@ namespace ROIS.Models
     {
         public string prod_code { get; set; }
         public string location { get; set; }
-        public int quantity { get; set; }
-        public string weight { get; set; }
+        public double quantity { get; set; }
+        public double weight { get; set; }
     }
 }

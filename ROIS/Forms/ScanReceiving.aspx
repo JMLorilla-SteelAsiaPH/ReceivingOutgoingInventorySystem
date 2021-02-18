@@ -107,6 +107,14 @@
                     </div>
 
                     <div class="form-group m-form__group row">
+                        <label for="example-qty-input" class="col-3 col-form-label">Location:</label>
+                        <div class="col-5">
+                            <select class="form-control m-input" id="selectLocation">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
                         <button type="button" class=" col-3 btn btn-accent" id="btnReceive">RECEIVE</button>
                         <div class="col-5">
                         </div>

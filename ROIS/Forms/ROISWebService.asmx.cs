@@ -260,7 +260,7 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void GenerateInventorySummaryDt()
+        public void GenerateInventorySummaryDt(string userLocationDesc)
         {
             List<InventorySummaryDt> select_list = new List<InventorySummaryDt>();
 
@@ -268,8 +268,9 @@ namespace ROIS.Forms
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("SELECT prod_code, location_desc, CAST(quantity AS int) AS quantity, cast(wt AS varchar) AS wt FROM uvw_generate_inventory_summary", con);
-                    //cmd.CommandType = CommandType.StoredProcedure;
+                    SqlCommand cmd = new SqlCommand("usp_exec_inventory_summary_table", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserLocation", userLocationDesc);
                     //cmd.CommandType = CommandType.Text;
 
                     con.Open();
@@ -282,8 +283,8 @@ namespace ROIS.Forms
 
                         select.prod_code = rdr["prod_code"].ToString();
                         select.location = rdr["location_desc"].ToString();
-                        select.quantity = (int)rdr["quantity"];
-                        select.weight = rdr["wt"].ToString();
+                        select.quantity = (double)rdr["quantity"];
+                        select.weight = (double)rdr["wt"];
 
                         select_list.Add(select);
                     }
@@ -355,7 +356,7 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void UserAuthentication(string username, string userPass)
+        public void UserAuthentication(string username, string userPass, string userLocation)
         {
             List<LoginAuthResult> authResultList = new List<LoginAuthResult>();
             LoginAuthResult authAttempt = new LoginAuthResult();
@@ -368,6 +369,7 @@ namespace ROIS.Forms
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@username", username);
                     cmd.Parameters.AddWithValue("@userPass", userPass);
+                    cmd.Parameters.AddWithValue("@location", userLocation);
 
                     con.Open();
 
