@@ -113,13 +113,16 @@
                             </select>
                         </div>
                     </div>
+                     
+                    <div class="form-group m-form__group row">
+                        <p style="font-weight: bold;">Kindly check the form if all information is correct, before submitting.</p>
+                    </div>
 
                     <div class="form-group m-form__group row">
                         <button type="button" class="btn btn-accent" id="btnSend">SEND OUT</button>
                         <div class="col-5">
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -178,30 +181,39 @@
             });
 
             $('#btnSend').click(function () {
-                var employee = sessionStorage.getItem("userId");
+                let confirmInsert = confirm("Are you sure that you want to record the following information?");
 
-                let argId = $('#txtBarcode').val();
-                let argRefNo = $("#txtRefNo").val();
-                let argProdCd = $("#txtProdCode").val();
-                let argFileNo = $("#txtFileNo").val();
-                let argBundleNo = $("#txtBundleNo").val();
-                let argLocId = $("#selectLocation").val();
-                let argQty = $("#txtQtyOut").val();
-
-                let num1 = parseInt($("#txtQtyOut").val());
-                let num2 = parseInt($("#txtQty").val());
-                let argLastUser = employee;
-
-                if (argQty <= 0) {
-                    swal("You cannot enter a zero or negative quantity. Please try again.");
-                }
-                else if (num1 > num2) {
-                    swal("The product does not have enough stock.");
-                }
-                else {
-                    outgoingData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argLocId, argQty, argLastUser);
+                if (confirmInsert == true) {
+                    ConfirmInsert();
                 }
             });
+
+           function ConfirmInsert()
+           {
+               var employee = sessionStorage.getItem("userId");
+
+               let argId = $('#txtBarcode').val();
+               let argRefNo = $("#txtRefNo").val();
+               let argProdCd = $("#txtProdCode").val();
+               let argFileNo = $("#txtFileNo").val();
+               let argBundleNo = $("#txtBundleNo").val();
+               let argLocId = $("#selectLocation").val();
+               let argQty = $("#txtQtyOut").val();
+
+               let num1 = parseInt($("#txtQtyOut").val());
+               let num2 = parseInt($("#txtQty").val());
+               let argLastUser = employee;
+
+               if (argQty <= 0) {
+                   swal("You cannot enter a zero or negative quantity. Please try again.");
+               }
+               else if (num1 > num2) {
+                   swal("The product does not have enough stock.");
+               }
+               else {
+                   outgoingData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argLocId, argQty, argLastUser);
+               }
+           }
 
             //function check_barcode_if_exists(scanned_barcode) {
             //    var request = new XMLHttpRequest();

@@ -115,7 +115,11 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <button type="button" class=" col-3 btn btn-accent" id="btnReceive">RECEIVE</button>
+                        <p style="font-weight: bold;">Kindly check the form if all information is correct, before submitting.</p>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <button type="button" class="btn btn-accent" id="btnReceive">RECEIVE</button>
                         <div class="col-5">
                         </div>
                     </div>
@@ -155,7 +159,9 @@
     <!--end::Modal-->
 
    <script>
-        $(document).ready(function () {
+       $(document).ready(function () {
+           locationDropDown(); 
+
             $('#btnEdit1').hide();
             $('.progress').hide();
             $('#btnReceive').prop("disabled", true);
@@ -236,6 +242,38 @@
             });
 
         });
+
+       function locationDropDown() {
+           let i = 0;
+           let sel = document.getElementById("selectLocation");
+           let employee = sessionStorage.getItem("userId");
+           let data = JSON.stringify({ currUserId : employee });
+           let request = new XMLHttpRequest();
+           request.open('POST', 'ROISWebService.asmx/GetDropDownData');
+           request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+           request.onload = function () {
+               if (this.status >= 200 && this.status < 400) {
+                   let location = JSON.parse(this.responseText);
+
+                   for (i in location) {
+                       let opt = document.createElement("option");
+                       opt.appendChild(document.createTextNode(location[i].locationDesc));
+                       opt.value = location[i].locationId;
+                       sel.appendChild(opt);
+                   }
+               }
+               else {
+
+               }
+           };
+
+           request.onerror = function () {
+
+           };
+
+           request.send(data);
+       }
 
        function check_barcode_if_exists(scanned_barcode) {
            var request = new XMLHttpRequest();
