@@ -429,7 +429,7 @@
 
                 function setUserPassword(username, password) {
                     $.ajax({
-                        url: 'tqs_webservice.asmx/set_user_pass',
+                        url: 'ROISWebService.asmx/set_user_pass',
                         method: 'post',
                         contentType: "application/json; charset=utf-8",
                         dataType: 'json',

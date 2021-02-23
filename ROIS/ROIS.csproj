@@ -1425,7 +1425,6 @@
     <Compile Include="Models\Reasons.cs" />
     <Compile Include="Models\UserClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="scripts\DatabaseConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Forms\Site.Master" />

@@ -176,7 +176,7 @@
 
        $(document).ready(function () {
            locationDropDown();
-           getReasons(1);
+           getReasons(2);
 
             $('#btnEdit1').hide();
             $('.progress').hide();

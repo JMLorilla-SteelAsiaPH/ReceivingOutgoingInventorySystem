@@ -335,6 +335,12 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
+        public void set_user_pass(string username, string password)
+        {
+
+        }
+
+        [WebMethod]
         public void GenerateInventoryDt()
         {
             List<InventoryDt> select_list = new List<InventoryDt>();
