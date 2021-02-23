@@ -39,6 +39,10 @@
     $(document).ready(function () {
         loadGrid();
 
+        if (!localStorage) {
+            $(location).attr('href', 'Login.aspx');
+        }
+
         function loadGrid() {
             let locationDesc = sessionStorage.getItem("userLocDesc");
 

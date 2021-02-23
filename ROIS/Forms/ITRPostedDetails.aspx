@@ -37,10 +37,13 @@
             </div>
         </div>
     </div>
-
 <script>
     $(document).ready(function () {
         loadGrid();
+
+        if (!localStorage) {
+            $(location).attr('href', 'Login.aspx');
+        }
 
         function loadGrid() {
             $.ajax({

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Forms/Site.Master" AutoEventWireup="true" CodeBehind="ScanOutgoing.aspx.cs" Inherits="ROIS.Forms.ScanOutgoing" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Forms/Site.Master" AutoEventWireup="true" CodeBehind="HallTransfer.aspx.cs" Inherits="ROIS.Forms.HallTransfer" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <link href="../css/upload_style.css" rel="stylesheet" />
     <link href="../css/lightbox.min.css" rel="stylesheet" />
@@ -37,7 +37,7 @@
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
-                            <h3 class="m-portlet__head-text">Outgoing Issuance
+                            <h3 class="m-portlet__head-text">Hall Transfer
                             </h3>
                         </div>
                     </div>
@@ -100,25 +100,9 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <label for="example-qty-input" class="col-3 col-form-label">Qty. To Be Issued:</label>
-                        <div class="col-5">
-                            <input type="number" class="form-control m-input" id="txtQtyOut">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
                         <label for="example-qty-input" class="col-3 col-form-label">Location:</label>
                         <div class="col-5">
                             <select class="form-control m-input" id="selectLocation">
-                                <option value="0">--SELECT--</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-qty-input" class="col-3 col-form-label">Reason:</label>
-                        <div class="col-5">
-                            <select class="form-control m-input" id="selectReason">
                                 <option value="0">--SELECT--</option>
                             </select>
                         </div>
@@ -129,7 +113,7 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <button type="button" class="btn btn-accent" id="btnSend">SEND OUT</button>
+                        <button type="button" class="btn btn-accent" id="btnTransfer">TRANSFER</button>
                         <div class="col-5">
                         </div>
                     </div>
@@ -176,8 +160,6 @@
 
        $(document).ready(function () {
            locationDropDown();
-           getReasons(1);
-
             $('#btnEdit1').hide();
             $('.progress').hide();
             var employee = sessionStorage.getItem("username");
@@ -202,40 +184,18 @@
 
            function ConfirmInsert()
            {
-               var employee = sessionStorage.getItem("userId");
-
-               let argId = $('#txtBarcode').val();
-               let argRefNo = $("#txtRefNo").val();
-               let argProdCd = $("#txtProdCode").val();
-               let argFileNo = $("#txtFileNo").val();
-               let argLocId = $("#selectLocation").val();
-               let argQty = $("#txtQtyOut").val();
-               let argReasonId = $("#selectReason").val();
-
-               let num1 = parseInt($("#txtQtyOut").val());
-               let num2 = parseInt($("#txtQty").val());
+               let employee = sessionStorage.getItem("userId");
                let argLastUser = employee;
 
-               //if (argQty <= 0) {
-               //    swal("Error", "You cannot enter a zero or negative quantity. Please try again.", "error");
-               //}
-
-               //if (num1 > num2) {
-               //    swal("Error", "The product does not have enough stock.", "error");
-               //}
-
-               //if (argReasonId <= 0) {
-               //    swal("Error", "Please select a reason for outgoing issuance", "error");
-               //}
-
-               if (argQty > 0 && num1 <= num2 && argReasonId != 0) {
-                   outgoingData(argId, argRefNo, argProdCd, argFileNo, argLocId, argQty, argLastUser, argReasonId);
+               let argId = $('#txtBarcode').val();
+               let argLocId = $("#selectLocation").val();
+               
+               if (argLocId == 0) {
+                   swal("Error", "Please select a location", "error");
                }
                else {
-                   swal("Error", "You have entered incomplete details. Please try again", "error");
+                   hallTransferData(argId, argLocId, argLastUser);
                }
-
-               clearForm();
            }
 
             //function check_barcode_if_exists(scanned_barcode) {
@@ -270,16 +230,16 @@
             //    request.send(data);
             //}
 
-            function outgoingData(argId, argRefNo, argProdCd, argFileNo, argLocId, argQty, argLastUser, argReasonId) {
+            function hallTransferData(argId, argLocId, argLastUser) {
                 var request = new XMLHttpRequest();
-                var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passLocId: argLocId, passQty: argQty, passLastUser: argLastUser, passReasonId: argReasonId });
-                request.open('POST', 'ROISWebService.asmx/InsertOutgoingData', true);
+                var data = JSON.stringify({ locId: argLocId, passUserId: argLastUser, passBarcode: argId });
+                request.open('POST', 'ROISWebService.asmx/HallTransfer', true);
                 request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
                 request.onload = function () {
                     if (this.status >= 200 && this.status < 400) {
                         // Success!
-                        swal("Success!", "Outgoing Data Recorded", "success");
+                        swal("Success!", "Product Transfered", "success");
                         clearForm();
                     } else {
                         console.log(this.response);
@@ -298,12 +258,11 @@
                 document.getElementById("txtRefNo").value = "";
                 document.getElementById("txtProdCode").value = "";
                 document.getElementById("txtFileNo").value = "";
-                document.getElementById("selectLocation").value = 0;
-                document.getElementById("selectReason").value = 0;
                 document.getElementById("txtBundleNo").value = "";
                 document.getElementById("txtQty").value = 0;
                 document.getElementById("txtQtyOut").value = 0;
-                document.getElementById("btnSend").disabled = true;
+                document.getElementById("selectLocation").value = 0;
+                document.getElementById("btnTransfer").disabled = true;
             }
 
             $('#btnScan').click(function () {
@@ -344,7 +303,7 @@
         });
 
        function locationDropDown() {
-           let fromLocalStorage = JSON.parse(localStorage.getItem("outgoingDropdown"));
+           let fromLocalStorage = JSON.parse(localStorage.getItem("receivingDropdown"));
            let sel = document.getElementById("selectLocation");
 
            if (!fromLocalStorage) {
@@ -361,36 +320,23 @@
            }
        }
 
-       function getReasons(transactionType) {
-           let currentUserId = sessionStorage.getItem("userId");
-           let sel = document.getElementById("selectReason");
-           let data = JSON.stringify({ userId: currentUserId, transactionMode: transactionType });
-           let request = new XMLHttpRequest();
-           request.open('POST', 'ROISWebService.asmx/GetReasons');
-           request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+       //function reasonDropDown() {
+       //    let fromLocalStorage = JSON.parse(localStorage.getItem("outgoingDropdown"));
+       //    let sel = document.getElementById("selectReason");
 
-           request.onload = function () {
-               if (this.status >= 200 && this.status < 400) {
-                   let reasons = JSON.parse(this.responseText);
-
-                   for (i in reasons) {
-                       let opt = document.createElement("option");
-                       opt.appendChild(document.createTextNode(reasons[i].reasonDesc));
-                       opt.value = reasons[i].reasonId;
-                       sel.appendChild(opt);
-                   }
-               }
-               else {
-
-               }
-           };
-
-           request.onerror = function () {
-               console.log("Test");
-           };
-
-           request.send(data);
-       }
+       //    if (!fromLocalStorage) {
+       //        $(location).attr('href', 'Login.aspx');
+       //    }
+       //    else {
+       //        console.log(!fromLocalStorage);
+       //        for (i in fromLocalStorage) {
+       //            let opt = document.createElement("option");
+       //            opt.appendChild(document.createTextNode(fromLocalStorage[i].locationDesc));
+       //            opt.value = fromLocalStorage[i].locationId;
+       //            sel.appendChild(opt);
+       //        }
+       //    }
+       //}
 
        function scanBarcode(scanned_barcode) {
            var request = new XMLHttpRequest();

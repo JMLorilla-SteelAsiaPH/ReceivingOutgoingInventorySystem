@@ -80,22 +80,9 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <label for="example-locid-input" class="col-3 col-form-label">Location ID</label>
-                        <div class="col-3">
-                            <input type="text" class="form-control m-input" id="txtLocID" placeholder="Location ID" disabled="disabled">
-                        </div>
-                    </div>
-                    <div class="form-group m-form__group row">
                         <label for="example-fileno-input" class="col-3 col-form-label">File No.</label>
                         <div class="col-9">
                             <input type="text" class="form-control m-input" id="txtFileNo" placeholder="File No." disabled="disabled">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-bundleno-input" class="col-3 col-form-label">Bundle No.</label>
-                        <div class="col-9">
-                            <input type="text" class="form-control m-input" id="txtBundleNo" placeholder="Bundle No." disabled="disabled">
                         </div>
                     </div>
 
@@ -110,6 +97,15 @@
                         <label for="example-qty-input" class="col-3 col-form-label">Location:</label>
                         <div class="col-5">
                             <select class="form-control m-input" id="selectLocation">
+                                <option value="0">--SELECT--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group row">
+                        <label for="example-qty-input" class="col-3 col-form-label">Reason:</label>
+                        <div class="col-5">
+                            <select class="form-control m-input" id="selectReason">
                                 <option value="0">--SELECT--</option>
                             </select>
                         </div>
@@ -163,6 +159,8 @@
        $(document).ready(function () {
            locationDropDown(); 
 
+           getReasons(1);
+
             $('#btnEdit1').hide();
             $('.progress').hide();
             $('#btnReceive').prop("disabled", true);
@@ -175,16 +173,16 @@
                 }
             });
 
-            function receiveData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argLastUser) {
+            function receiveData(argId, argRefNo, argProdCd, argFileNo, argQty, argLastUser, argReasonId) {
                 var request = new XMLHttpRequest();
-                var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passBundleNo: argBundleNo, passQty: argQty, passLastUser: argLastUser });
+                var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passQty: argQty, passLastUser: argLastUser, passReasonId: argReasonId });
                 request.open('POST', 'ROISWebService.asmx/InsertReceivingData', true);
                 request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
                 request.onload = function () {
                     if (this.status >= 200 && this.status < 400) {
                         // Success!
-                        swal("Receiving Data Recorded");
+                        swal("Success!", "Receiving Data Recorded", "success");
                         clearForm();
                     } else {
                         console.log(this.response);
@@ -205,11 +203,17 @@
                let argRefNo = $("#txtRefNo").val();
                let argProdCd = $("#txtProdCode").val();
                let argFileNo = $("#txtFileNo").val();
-               let argBundleNo = $("#txtBundleNo").val();
                let argQty = $("#txtQty").val();
+               let argReasonId = $("#selectReason").val();
                let argLastUser = employee;
 
-               receiveData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argLastUser);
+               if (argReasonId > 0) {
+                   receiveData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argLastUser, argReasonId);
+               }
+               else {
+                   swal("Error", "Please select a reason for receiving issuance.", "error");
+               }
+               
            }
 
             $('#txtBarcode').blur(function () {
@@ -250,14 +254,45 @@
                 console.log("Stop camera.");
             });
 
-        });
+       });
+
+       function getReasons(transactionType) {
+           let currentUserId = sessionStorage.getItem("userId");
+           let sel = document.getElementById("selectReason");
+           let data = JSON.stringify({ userId: currentUserId, transactionMode: transactionType });
+           let request = new XMLHttpRequest();
+           request.open('POST', 'ROISWebService.asmx/GetReasons');
+           request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+           request.onload = function () {
+               if (this.status >= 200 && this.status < 400) {
+                   let reasons = JSON.parse(this.responseText);
+
+                   for (i in reasons) {
+                       let opt = document.createElement("option");
+                       opt.appendChild(document.createTextNode(reasons[i].reasonDesc));
+                       opt.value = reasons[i].reasonId;
+                       sel.appendChild(opt);
+                   }
+               }
+               else {
+
+               }
+           };
+
+           request.onerror = function () {
+               console.log("Test");
+           };
+
+           request.send(data);
+       }
 
        function locationDropDown() {
-           let fromLocalStorage = JSON.parse(localStorage.getItem("locDropDownOptions"));
+           let fromLocalStorage = JSON.parse(localStorage.getItem("receivingDropdown"));
            let sel = document.getElementById("selectLocation");
 
            if (!fromLocalStorage) {
-               $(location).attr('href', 'Home.aspx');
+               $(location).attr('href', 'Login.aspx');
            }
            else {
                console.log(!fromLocalStorage);
@@ -282,12 +317,12 @@
                    var result = JSON.parse(this.responseText);
 
                    if (result > 0) {
-                       swal("Data already exists on records.");
+                       swal("Scan Failed!", "Data already exists on inventory records. Please try again.", "error");
                        $('#btnReceive').prop("disabled", true);
                        clearForm();
                    }
                    else {
-                       load_ITRLT_posted_subdetails(scanned_barcode);
+                       load_barcode_details(scanned_barcode, sessionStorage.getItem("userLocDesc"));
                    }
                } else {
                    // We reached our target server, but it returned an error
@@ -308,32 +343,29 @@
            document.getElementById("txtRefNo").value = "";
            document.getElementById("txtProdCode").value = "";
            document.getElementById("txtFileNo").value = "";
-           document.getElementById("txtBundleNo").value = "";
-           document.getElementById("txtLocID").value = "";
            document.getElementById("txtQty").value = 0;
+           document.getElementById("selectReason").value = 0;
        }
 
-       function load_ITRLT_posted_subdetails(scanned_barcode) {
+       function load_barcode_details(scanned_barcode, userLocation) {
            var request = new XMLHttpRequest();
-           var data = JSON.stringify({ scanned_barcode: scanned_barcode });
-           request.open('POST', 'ROISWebService.asmx/GetPostedSubdetails', true);
+           var data = JSON.stringify({ scanned_barcode: scanned_barcode, userLoc: userLocation });
+           request.open('POST', 'ROISWebService.asmx/GetPostedDetails', true);
            request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
            request.onload = function () {
                if (this.status >= 200 && this.status < 400) {
                    // Success!
-                   var subdetails = JSON.parse(this.responseText);
+                   var details = JSON.parse(this.responseText);
 
-                   if (subdetails.length != 0) {
-                       document.getElementById("txtRefNo").value = subdetails[0].barcodetag;
-                       document.getElementById("txtProdCode").value = subdetails[0].prodcode;
-                       document.getElementById("txtFileNo").value = subdetails[0].filenumber;
-                       document.getElementById("txtBundleNo").value = subdetails[0].bundlenumber;
-                       document.getElementById("txtLocID").value = subdetails[0].locationcode;
-                       document.getElementById("txtQty").value = subdetails[0].quantity;
+                   if (details.length != 0) {
+                       document.getElementById("txtRefNo").value = details[0].DrNo;
+                       document.getElementById("txtProdCode").value = details[0].ProdCode;
+                       document.getElementById("txtFileNo").value = details[0].FileNumber;
+                       document.getElementById("txtQty").value = details[0].Qty;
                        $('#btnReceive').prop("disabled", false);
                    } else {
-                       swal("Data does not exist from source records.");
+                       swal("Scan Failed!", "Data does not exist from source records. Please try again.", "error");
                        $('#btnReceive').prop("disabled", true);
                    }
                } else {
@@ -341,8 +373,6 @@
                    document.getElementById("txtRefNo").value = "";
                    document.getElementById("txtProdCode").value = "";
                    document.getElementById("txtFileNo").value = "";
-                   document.getElementById("txtBundleNo").value = "";
-                   document.getElementById("txtLocID").value = "";
                    document.getElementById("txtQty").value = 0;
                }
            };
@@ -354,7 +384,6 @@
            request.send(data);
        }
    </script>
-
     <script src="../scripts/lightbox-plus-jquery.min.js"></script>
     <script src="../scripts/adapter-latest.js"></script>
     <script src="../scripts/quagga.js"></script>

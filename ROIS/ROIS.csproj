@@ -75,6 +75,7 @@
     <Content Include="css\responsive.datatable.css" />
     <Content Include="css\style.css" />
     <Content Include="css\upload_style.css" />
+    <Content Include="Forms\HallTransfer.aspx" />
     <Content Include="Forms\Home.aspx" />
     <Content Include="Forms\Login.aspx" />
     <Content Include="Forms\Mill_Inventory.aspx" />
@@ -98,6 +99,7 @@
     <Content Include="scripts\quagga.js" />
     <Content Include="scripts\responsive.datatable.js" />
     <Content Include="scripts\scale.fix.js" />
+    <Content Include="scripts\get-dropdown-options.js" />
     <Content Include="scripts\webfont.js" />
     <Content Include="vendors\assets\app\js\dashboard.js" />
     <Content Include="vendors\assets\app\js\dashboard.min.js" />
@@ -1352,6 +1354,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\HallTransfer.aspx.cs">
+      <DependentUpon>HallTransfer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Forms\HallTransfer.aspx.designer.cs">
+      <DependentUpon>HallTransfer.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1405,6 +1414,7 @@
     <Compile Include="Forms\ITRPostedDetails.aspx.designer.cs">
       <DependentUpon>ITRPostedDetails.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\DrPostedDetails.cs" />
     <Compile Include="Models\InventoryDt.cs" />
     <Compile Include="Models\InventorySummaryDt.cs" />
     <Compile Include="Models\ITRLTPostedSubdetails.cs" />
@@ -1412,6 +1422,7 @@
     <Compile Include="Models\LoginAuthResult.cs" />
     <Compile Include="Models\Outgoing.cs" />
     <Compile Include="Models\PostedDetailsTable.cs" />
+    <Compile Include="Models\Reasons.cs" />
     <Compile Include="Models\UserClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="scripts\DatabaseConnection.cs" />

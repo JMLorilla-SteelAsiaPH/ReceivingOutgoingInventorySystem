@@ -159,7 +159,7 @@
 
                                                             <li class="m-nav__separator m-nav__separator--fit"></li>
                                                             <li class="m-nav__item">
-                                                                <a href="Login.aspx" class="btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</a>
+                                                                <button id="myLogoutBtn" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">Logout</button>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -202,11 +202,12 @@
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item  m-menu__item" id="ScanOutgoingLink" aria-haspopup="true"><a href="ScanOutgoing.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Scan Outgoing</span></a></li>
                                     <li class="m-menu__item  m-menu__item" aria-haspopup="true" id="ScanReceivingLink"><a href="ScanReceiving.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Scan Receiving</span></a></li>
+                                    <li class="m-menu__item  m-menu__item" aria-haspopup="true" id="ScanReceivingLink"><a href="HallTransfer.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Hall Transfer</span></a></li>
                                 </ul>
                             </div>
                         </li>
 
-                        <li class="m-menu__item  m-menu__item" id="ReceiveInspector" aria-haspopup="true"><a href="ITRPostedDetails.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-notepad"></i><span class="m-menu__link-text">Receiving Inspector</span></a></li>
+                        <%--<li class="m-menu__item  m-menu__item" id="ReceiveInspector" aria-haspopup="true"><a href="ITRPostedDetails.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-notepad"></i><span class="m-menu__link-text">Receiving Inspector</span></a></li>--%>
                         <li class="m-menu__item  m-menu__item" id="Mill-Inventory" aria-haspopup="true"><a href="Mill_Inventory.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><i class="m-menu__link-icon flaticon-notepad"></i><span class="m-menu__link-text">Mill Inventory</span></a></li>
                     </ul>
                 </div>
@@ -418,6 +419,12 @@
                         },
                         equalTo: "New password is not equal to the other."
                     }
+                });
+
+                $('#myLogoutBtn').click(function () {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    window.location.href = 'Login.aspx';
                 });
 
                 function setUserPassword(username, password) {

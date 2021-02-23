@@ -63,8 +63,6 @@ namespace ROIS.Forms
                     con.Close();
                     con.Dispose();
                 }
-
-
             }
 
             JavaScriptSerializer js = new JavaScriptSerializer();
@@ -75,17 +73,45 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void GetDropDownData(string currUserLoc)
+        public void HallTransfer(int locId, int passUserId, string passBarcode)
+        {
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("usp_hall_transfer", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ItemBarcode", passBarcode);
+                    cmd.Parameters.AddWithValue("@SelectedLocId", locId);
+                    cmd.Parameters.AddWithValue("@LastUserId", passUserId);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+        }
+
+        [WebMethod]
+        public void GetDropDownData(int userId, int transactionMode)
         {
             List<LocationDropDown> select_list = new List<LocationDropDown>();
             using (SqlConnection con = new SqlConnection(rois_connstring))
             {
                 try
                 {
-                    //SqlCommand cmd = new SqlCommand("usp_get_location", con);
-                    SqlCommand cmd = new SqlCommand("usp_test_sp", con);
+                    SqlCommand cmd = new SqlCommand("usp_get_location", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@myUserLocationDesc", currUserLoc);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@IN_OUT", transactionMode);
                     con.Open();
 
                     SqlDataReader rdr = cmd.ExecuteReader();
@@ -126,8 +152,8 @@ namespace ROIS.Forms
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("SELECT location_id, location_desc FROM locations", con);
-                    cmd.CommandType = CommandType.Text;
+                    SqlCommand cmd = new SqlCommand("usp_exec_uvw_get_main_location", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
 
                     con.Open();
 
@@ -137,8 +163,7 @@ namespace ROIS.Forms
                     {
                         LocationDropDown select = new LocationDropDown();
 
-                        select.locationId = (int)rdr["location_id"];
-                        select.locationDesc = rdr["location_desc"].ToString();
+                        select.locationDesc = rdr["MainLocation"].ToString();
 
                         select_list.Add(select);
                     }
@@ -161,7 +186,7 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void InsertOutgoingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passBundleNo, int passLocId, string passQty, int passLastUser)
+        public void InsertOutgoingData(string passId, string passRefNo, string passProdCd, string passFileNo, int passLocId, string passQty, int passLastUser, int passReasonId)
         {
             using (SqlConnection con = new SqlConnection(rois_connstring))
             {
@@ -173,10 +198,10 @@ namespace ROIS.Forms
                     cmd.Parameters.AddWithValue("@RefNo", passRefNo);
                     cmd.Parameters.AddWithValue("@ProdCode", passProdCd);
                     cmd.Parameters.AddWithValue("@FileNo", passFileNo);
-                    cmd.Parameters.AddWithValue("@BundleNo", passBundleNo);
                     cmd.Parameters.AddWithValue("@LocationID", passLocId);
                     cmd.Parameters.AddWithValue("@Qty", passQty);
                     cmd.Parameters.AddWithValue("@LastUser", passLastUser);
+                    cmd.Parameters.AddWithValue("@ReasonID", passReasonId);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -229,7 +254,7 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void InsertReceivingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passBundleNo, string passQty, int passLastUser)
+        public void InsertReceivingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passQty, int passLastUser, int passReasonId)
         {
             using (SqlConnection con = new SqlConnection(rois_connstring))
             {
@@ -241,9 +266,9 @@ namespace ROIS.Forms
                     cmd.Parameters.AddWithValue("@RefNo", passRefNo);
                     cmd.Parameters.AddWithValue("@ProdCode", passProdCd);
                     cmd.Parameters.AddWithValue("@FileNo", passFileNo);
-                    cmd.Parameters.AddWithValue("@BundleNo", passBundleNo);
                     cmd.Parameters.AddWithValue("@Qty", passQty);
                     cmd.Parameters.AddWithValue("@LastUser", passLastUser);
+                    cmd.Parameters.AddWithValue("@ReasonID", passReasonId);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -402,31 +427,73 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void GetPostedSubdetails(string scanned_barcode)
+        public void GetReasons(int userId, int transactionMode)
         {
-            List<ITRLTPostedSubdetails> select_list = new List<ITRLTPostedSubdetails>();
+            List<Reasons> select_list = new List<Reasons>();
+
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("usp_get_reason", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@userId", userId);
+                    cmd.Parameters.AddWithValue("@IN_OUT", transactionMode);
+                    con.Open();
+
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        Reasons select = new Reasons();
+
+                        select.reasonId = (int)rdr["ID"];
+                        select.reasonDesc = rdr["reason_desc"].ToString();
+
+                        select_list.Add(select);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+
+                }
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.ContentType = "text/event-stream";
+            Context.Response.Write(js.Serialize(select_list));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
+        public void GetPostedDetails(string scanned_barcode, string userLoc)
+        {
+            List<DrPostedDetails> select_list = new List<DrPostedDetails>();
 
             using (SqlConnection con = new SqlConnection(sdis_connstring))
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("usp_get_ITRLTPostedSubDetail", con);
+                    SqlCommand cmd = new SqlCommand("usp_ROIS_Get_barcode_details", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@ScannedBarcodeTag", scanned_barcode);
-
+                    cmd.Parameters.AddWithValue("@ID", scanned_barcode);
+                    cmd.Parameters.AddWithValue("@Loc", userLoc);
                     con.Open();
                     SqlDataReader rdr = cmd.ExecuteReader();
 
                     while (rdr.Read())
                     {
-                        ITRLTPostedSubdetails select = new ITRLTPostedSubdetails();
-                        select.barcodetag = rdr["ITRNo"].ToString();
-                        select.prodcode = rdr["ProdCd"].ToString();
-                        select.locationcode = rdr["ActWHLocationCd"].ToString();
-                        select.quantity = int.Parse(rdr["Qty"].ToString());
-                        select.filenumber = rdr["FileNumber"].ToString();
-                        select.bundlenumber = rdr["BundleNumber"].ToString();
-
+                        DrPostedDetails select = new DrPostedDetails();
+                        select.DrNo = rdr["DRNo"].ToString();
+                        select.ProdCode = rdr["ProdCd"].ToString();
+                        select.Qty = (int)rdr["Qty"];
+                        select.FileNumber = rdr["FileNumber"].ToString();
+                        select.BarcodeNum = rdr["BundleNumber"].ToString();
                         select_list.Add(select);
                     }
                 }
