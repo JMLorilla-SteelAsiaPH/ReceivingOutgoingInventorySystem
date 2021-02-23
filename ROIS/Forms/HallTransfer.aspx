@@ -174,7 +174,7 @@
                 }
             });
 
-            $('#btnSend').click(function () {
+            $('#btnTransfer').click(function () {
                 let confirmInsert = confirm("Are you sure that you want to record the following information?");
 
                 if (confirmInsert == true) {

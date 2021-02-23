@@ -254,7 +254,7 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void InsertReceivingData(string passId, string passRefNo, string passProdCd, string passFileNo, string passQty, int passLastUser, int passReasonId)
+        public void InsertReceivingData(string passId, string passRefNo, string passProdCd, string passFileNo, int passLocId, string passQty, int passLastUser, int passReasonId)
         {
             using (SqlConnection con = new SqlConnection(rois_connstring))
             {
@@ -269,13 +269,14 @@ namespace ROIS.Forms
                     cmd.Parameters.AddWithValue("@Qty", passQty);
                     cmd.Parameters.AddWithValue("@LastUser", passLastUser);
                     cmd.Parameters.AddWithValue("@ReasonID", passReasonId);
+                    cmd.Parameters.AddWithValue("@LocationID", passLocId);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
                 catch(SqlException ex)
                 {
-
+                    string wew = ex.Message;
                 }
                 finally
                 {

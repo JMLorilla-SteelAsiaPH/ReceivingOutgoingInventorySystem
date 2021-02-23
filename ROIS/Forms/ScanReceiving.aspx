@@ -173,9 +173,9 @@
                 }
             });
 
-            function receiveData(argId, argRefNo, argProdCd, argFileNo, argQty, argLastUser, argReasonId) {
+            function receiveData(argId, argRefNo, argProdCd, argFileNo, argQty, argLocId, argLastUser, argReasonId) {
                 var request = new XMLHttpRequest();
-                var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passQty: argQty, passLastUser: argLastUser, passReasonId: argReasonId });
+                var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passQty: argQty, passLocId: argLocId, passLastUser: argLastUser, passReasonId: argReasonId });
                 request.open('POST', 'ROISWebService.asmx/InsertReceivingData', true);
                 request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
@@ -205,10 +205,11 @@
                let argFileNo = $("#txtFileNo").val();
                let argQty = $("#txtQty").val();
                let argReasonId = $("#selectReason").val();
+               let argLocId = $("#selectLocation").val();
                let argLastUser = employee;
 
                if (argReasonId > 0) {
-                   receiveData(argId, argRefNo, argProdCd, argFileNo, argBundleNo, argQty, argLastUser, argReasonId);
+                   receiveData(argId, argRefNo, argProdCd, argFileNo, argQty, argLocId, argLastUser, argReasonId);
                }
                else {
                    swal("Error", "Please select a reason for receiving issuance.", "error");
