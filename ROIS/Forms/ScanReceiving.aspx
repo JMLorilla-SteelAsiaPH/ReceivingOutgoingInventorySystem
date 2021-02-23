@@ -340,7 +340,7 @@
        }
 
        function clearForm() {
-           document.getElementById("#txtBarcode").value = "";
+           document.getElementById("txtBarcode").value = "";
            document.getElementById("txtRefNo").value = "";
            document.getElementById("txtProdCode").value = "";
            document.getElementById("txtFileNo").value = "";

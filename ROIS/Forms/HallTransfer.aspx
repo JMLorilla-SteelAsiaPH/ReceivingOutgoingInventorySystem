@@ -86,13 +86,6 @@
                     </div>
 
                     <div class="form-group m-form__group row">
-                        <label for="example-bundleno-input" class="col-3 col-form-label">Bundle No.</label>
-                        <div class="col-9">
-                            <input type="text" class="form-control m-input" id="txtBundleNo" placeholder="Bundle No." disabled="disabled">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
                         <label for="example-qty-input" class="col-3 col-form-label">Current Qty.</label>
                         <div class="col-5">
                             <input type="number" class="form-control m-input" id="txtQty" disabled="disabled">
@@ -258,7 +251,7 @@
                 document.getElementById("txtRefNo").value = "";
                 document.getElementById("txtProdCode").value = "";
                 document.getElementById("txtFileNo").value = "";
-                document.getElementById("txtBundleNo").value = "";
+                //document.getElementById("txtBundleNo").value = "";
                 document.getElementById("txtQty").value = 0;
                 document.getElementById("txtQtyOut").value = 0;
                 document.getElementById("selectLocation").value = 0;
@@ -353,7 +346,7 @@
                        document.getElementById("txtRefNo").value = subdetails[0].referenceno;
                        document.getElementById("txtProdCode").value = subdetails[0].prodcode;
                        document.getElementById("txtFileNo").value = subdetails[0].filenumber;
-                       document.getElementById("txtBundleNo").value = subdetails[0].bundlenumber;
+                       //document.getElementById("txtBundleNo").value = subdetails[0].bundlenumber;
                        //document.getElementById("txtLocID").value = subdetails[0].locationcode;
                        document.getElementById("txtQty").value = subdetails[0].quantity;
                        $('#btnSend').prop("disabled", false);
@@ -368,7 +361,7 @@
                    document.getElementById("txtRefNo").value = "";
                    document.getElementById("txtProdCode").value = "";
                    document.getElementById("txtFileNo").value = "";
-                   document.getElementById("txtBundleNo").value = "";
+                   //document.getElementById("txtBundleNo").value = "";
                    document.getElementById("txtLocID").value = "";
                    document.getElementById("txtQty").value = 0;
                    
