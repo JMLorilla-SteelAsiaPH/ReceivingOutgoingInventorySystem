@@ -335,12 +335,6 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
-        public void set_user_pass(string username, string password)
-        {
-
-        }
-
-        [WebMethod]
         public void GenerateInventoryDt()
         {
             List<InventoryDt> select_list = new List<InventoryDt>();
@@ -570,6 +564,33 @@ namespace ROIS.Forms
             Context.Response.Write(js.Serialize(select_list));
             Context.Response.Flush();
             Context.Response.End();
+        }
+
+        [WebMethod]
+        public void set_user_pass(string username, string newPassword)
+        {
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("UPDATE application_users SET password = @NewPassword WHERE username = @MyUsername", con);
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@NewPassword", newPassword);
+                    cmd.Parameters.AddWithValue("@MyUsername", username);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
         }
     }
 }

@@ -163,6 +163,7 @@
                                 sessionStorage.setItem("userId", parseId);
                                 sessionStorage.setItem("userLocationId", userLocId);
                                 sessionStorage.setItem("userLocDesc", userlocation);
+                                sessionStorage.setItem("userPassword", password);
                                 $(location).attr('href', 'Home.aspx');
                             }
                             else {

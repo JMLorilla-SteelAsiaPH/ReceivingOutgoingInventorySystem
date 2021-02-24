@@ -390,15 +390,18 @@
                     var oldpass = $('#txtOldPassword').val();
                     var newpass1 = $('#txtNewPassword1').val();
 
-                    if (pass === oldpass) {
+                    if (oldpass === newpass1) {
                         console.log('same');
-                        setUserPassword(employee, newpass1)
-                        $(location).attr('href', 'Login.aspx')
-
+                        swal("Not Saved", "Password is the same as old password.", "warning");
+                    }
+                    else if (oldpass != sessionStorage.getItem("userPassword")) {
+                        console.log("Incorrect input on old password text box");
+                        swal("Not Saved", "Incorrect password on old password field.", "warning");
                     }
                     else {
-                        console.log('not the same');
-                        swal("Not Save!", "Incorrect password.", "warning");
+                        swal("Save!", "Successfully changed your password.", "success");
+                        setUserPassword(employee, newpass1);
+                        $(location).attr('href', 'Login.aspx');
                     }
                 });
 
@@ -433,7 +436,7 @@
                         method: 'post',
                         contentType: "application/json; charset=utf-8",
                         dataType: 'json',
-                        data: JSON.stringify({ username: username, password: password }),
+                        data: JSON.stringify({ username: username, newPassword: password }),
                         success: function (data) {
                             //alert(msg);
                             //console.log(data);
