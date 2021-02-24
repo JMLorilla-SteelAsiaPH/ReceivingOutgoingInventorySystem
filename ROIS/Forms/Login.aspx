@@ -145,6 +145,7 @@
     <script>
         $(document).ready(function () {
             getLocation();
+            checkIfUserLoggedIn();
 
             function checklogin(username, password, userlocation) {
                 if (username != '' && password != '') {
@@ -160,6 +161,7 @@
 
                             if (parseId != 0) {
                                 sessionStorage.setItem("username", $('#empid').val())
+                                localStorage.setItem("sessionUsername", $('#empid').val());
                                 sessionStorage.setItem("userId", parseId);
                                 sessionStorage.setItem("userLocationId", userLocId);
                                 sessionStorage.setItem("userLocDesc", userlocation);
@@ -201,6 +203,14 @@
                 }
             });
         });
+
+        function checkIfUserLoggedIn() {
+            existingUser = localStorage.getItem("sessionUsername");
+
+            if (existingUser) {
+                $(location).attr('href', 'Home.aspx');
+            }
+        }
 
         function getLocation() {
             let i = 0;
