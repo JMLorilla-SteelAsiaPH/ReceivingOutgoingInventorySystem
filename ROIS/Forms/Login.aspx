@@ -205,7 +205,7 @@
         });
 
         function checkIfUserLoggedIn() {
-            existingUser = localStorage.getItem("sessionUsername");
+            let existingUser = localStorage.getItem("sessionUsername");
 
             if (existingUser) {
                 $(location).attr('href', 'Home.aspx');
