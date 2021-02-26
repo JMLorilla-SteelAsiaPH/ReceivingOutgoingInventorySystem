@@ -210,6 +210,8 @@
             if (existingUser) {
                 $(location).attr('href', 'Home.aspx');
             }
+
+            return;
         }
 
         function getLocation() {
