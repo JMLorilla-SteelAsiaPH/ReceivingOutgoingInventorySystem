@@ -10,18 +10,11 @@
                 <div class="input-group input-group-lg m-input-group">
 
                     <div class="input-group-prepend">
-                        <%--                  <span class="input-group-text" id="basic-addon1"><i class="la la-barcode"></i>
-          
-                           
-                        </span>--%>
-
                         <%--Barcode scanning button--%>
                         <a href="#" class="btn btn-outline-accent btn-lg m-btn m-btn--icon " id="btnScan" name="btnScan">
                             <i class="la la-barcode"></i>
                         </a>
                         <%--Barcode scanning button--%>
-
-                        <%--  <input class="btn btn-secondary" type="button" id="btnScan" name="btnScan" value="Upload" />--%>
                     </div>
 
                     <input type="text" class="form-control form-co-lg m-input m--icon-font-size-sm2 align-items-lg-start" id="txtBarcode" placeholder="Scan Barcode" />
@@ -40,18 +33,6 @@
                             <h3 class="m-portlet__head-text">Outgoing Issuance
                             </h3>
                         </div>
-                    </div>
-                    <div class="m-portlet__head-tools">
-                        <ul class="m-portlet__nav">
-                            <li class="m-portlet__nav-item">
-                                <button class="m-portlet__nav-link btn btn-primary m-btn m-btn--pill m-btn--air" id="btnEdit1">
-                                    <span>
-                                        <i class="fa fa-clipboard-list"></i>
-                                        <span>Edit</span>
-                                    </span>
-                                </button>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
@@ -82,13 +63,6 @@
                         <label for="example-fileno-input" class="col-3 col-form-label">File No.</label>
                         <div class="col-9">
                             <input type="text" class="form-control m-input" id="txtFileNo" placeholder="File No." disabled="disabled">
-                        </div>
-                    </div>
-
-                    <div class="form-group m-form__group row">
-                        <label for="example-bundleno-input" class="col-3 col-form-label">Bundle No.</label>
-                        <div class="col-9">
-                            <input type="text" class="form-control m-input" id="txtBundleNo" placeholder="Bundle No." disabled="disabled">
                         </div>
                     </div>
 
@@ -171,9 +145,6 @@
     <!--end::Modal-->
 
    <script>
-//import { to } from "../vendors/moment/src/lib/moment/to";
-//import toInt from "../vendors/moment/src/lib/utils/to-int";
-
        $(document).ready(function () {
            locationDropDown();
            getReasons(2);
@@ -313,7 +284,7 @@
                     inputStream: {
                         name: "Live",
                         type: "LiveStream",
-                        target: document.querySelector('#interactive.viewport'),    // Or '#yourElement' (optional)
+                        target: document.querySelector('#interactive.viewport'),
                     },
                     decoder: {
                         readers: ["code_128_reader"]
@@ -326,8 +297,6 @@
                     console.log("Initialization finished. Ready to start");
                     Quagga.start();
                 });
-
-                //$('#modal_scan').modal('show');
             });
 
             Quagga.onDetected(function (result) {

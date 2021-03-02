@@ -5,9 +5,6 @@
 <html>
 <head runat="server">
 
-    <%--    <asp:ContentPlaceHolder ID="head" runat="server">
-    </asp:ContentPlaceHolder>--%>
-
     <meta charset="utf-8" />
     <title>ROIS | Dashboard</title>
     <meta name="description" content="Latest updates and statistic charts">
@@ -67,9 +64,7 @@
                     <div class="m-stack__item m-brand  m-brand--skin-dark ">
                         <div class="m-stack m-stack--ver m-stack--general">
                             <div class="m-stack__item m-stack__item--middle m-brand__logo">
-                                <a href="BlankForm.aspx" class="m-brand__logo-wrapper">
-                                   <%-- <img alt="" src="../vendors/assets/app/media/img/logos/SA LOGO_WHITE.png" height="100%" width="100%" />--%>
-                                     <%--<img alt="" src="../vendors/assets/app/media/img/logos/VMRS Logo 06.png" height="100%" width="100%" />--%>
+                                <a href="Home.aspx" class="m-brand__logo-wrapper">
                                 </a>
                             </div>
                             <div class="m-stack__item m-stack__item--middle m-brand__tools">
@@ -135,10 +130,8 @@
                                                         </div>
                                                         <div class="m-card-user__details">
                                                             <span class="m-card-user__name m--font-weight-500">
-                                                                <%--<asp:Label ID="luser" runat="server" Text="Username"></asp:Label></span>--%>
                                                                 <label id="luser" name="luser" />
                                                             </span>
-                                                            <%--<a href="" class="m-card-user__email m--font-weight-300 m-link">email@gmail.com</a>--%>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -401,6 +394,8 @@
                     else {
                         swal("Save!", "Successfully changed your password.", "success");
                         setUserPassword(employee, newpass1);
+                        localStorage.clear();
+                        sessionStorage.clear();
                         $(location).attr('href', 'Login.aspx');
                     }
                 });

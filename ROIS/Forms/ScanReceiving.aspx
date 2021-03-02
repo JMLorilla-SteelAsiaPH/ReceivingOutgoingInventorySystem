@@ -11,10 +11,6 @@
                 <div class="input-group input-group-lg m-input-group">
 
                     <div class="input-group-prepend">
-                        <%--                  <span class="input-group-text" id="basic-addon1"><i class="la la-barcode"></i>
-          
-                           
-                        </span>--%>
 
                         <%--Barcode scanning button--%>
                         <a href="#" class="btn btn-outline-accent btn-lg m-btn m-btn--icon " id="btnScan" name="btnScan">
@@ -23,8 +19,6 @@
 
                         </a>
                         <%--Barcode scanning button--%>
-
-                        <%--  <input class="btn btn-secondary" type="button" id="btnScan" name="btnScan" value="Upload" />--%>
                     </div>
 
                     <input type="text" class="form-control form-co-lg m-input m--icon-font-size-sm2 align-items-lg-start" id="txtBarcode" placeholder="Scan Barcode" />
@@ -43,18 +37,6 @@
                             <h3 class="m-portlet__head-text">Receiving Issuance
                             </h3>
                         </div>
-                    </div>
-                    <div class="m-portlet__head-tools">
-                        <ul class="m-portlet__nav">
-                            <li class="m-portlet__nav-item">
-                                <button class="m-portlet__nav-link btn btn-primary m-btn m-btn--pill m-btn--air" id="btnEdit1">
-                                    <span>
-                                        <i class="fa fa-clipboard-list"></i>
-                                        <span>Edit</span>
-                                    </span>
-                                </button>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
@@ -161,8 +143,6 @@
 
            getReasons(1);
 
-            $('#btnEdit1').hide();
-            $('.progress').hide();
             $('#btnReceive').prop("disabled", true);
 
             $('#btnReceive').click(function () {
@@ -360,6 +340,7 @@
                    var details = JSON.parse(this.responseText);
 
                    if (details.length != 0) {
+                       swal("Scan Success", "Successfully scanned barcode.", "success");
                        document.getElementById("txtRefNo").value = details[0].DrNo;
                        document.getElementById("txtProdCode").value = details[0].ProdCode;
                        document.getElementById("txtFileNo").value = details[0].FileNumber;

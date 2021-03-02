@@ -65,7 +65,6 @@
                             <div class="form-group m-form__group">
                                 <input class="form-control m-input m--align-center" type="text" placeholder="Enter Username" name="empid" autocomplete="off" id="empid" runat="server" />
                                 <input class="form-control m-input m--align-center" type="password" placeholder="Enter you password" name="txtPassword" autocomplete="off" id="txtPassword" runat="server" />
-                                <%--<asp:TextBox ID="empid" runat="server" class="form-control m-input m--align-center" type="text" placeholder="Employee ID"></asp:TextBox>--%>
                                 
                             </div>
                             <br /> 
@@ -77,27 +76,9 @@
                                </button>
                            </div>
                         
-
-                             <%--<button type="button" class="btn btn-accent" id="btnModal">Insert PlateNo</button>--%>
                             <!-- begin::Body -->
                             <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
-
-
-                                <%--<asp:Button ID="btnLogin" runat="server" Text="Login" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary " />--%>
                             </div>
-                            <%-- <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-danger alert-dismissible fade show" role="alert" id="divPopup" runat="server">
-                                <div class="m-alert__icon">
-                                    <i class="flaticon-exclamation-1"></i>
-                                    <span></span>
-                                </div>
-                                <div class="m-alert__text">
-                                    <strong>Invalid Account!</strong> Please try again.
-                                </div>
-                                <div class="m-alert__close">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    </button>
-                                </div>
-                            </div>--%>
                         </form>
                     </div>
                 </div>
