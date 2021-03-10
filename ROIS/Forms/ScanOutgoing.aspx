@@ -145,6 +145,20 @@
     <!--end::Modal-->
 
    <script>
+
+       function clearForm() {
+           document.getElementById("txtBarcode").value = "";
+           document.getElementById("txtRefNo").value = "";
+           document.getElementById("txtProdCode").value = "";
+           document.getElementById("txtFileNo").value = "";
+           document.getElementById("selectLocation").value = 0;
+           document.getElementById("selectReason").value = 0;
+           //document.getElementById("txtBundleNo").value = "";
+           document.getElementById("txtQty").value = 0;
+           document.getElementById("txtQtyOut").value = 0;
+           document.getElementById("btnSend").disabled = true;
+       }
+
        $(document).ready(function () {
            locationDropDown();
            getReasons(2);
@@ -264,19 +278,6 @@
                 request.send(data);
             }
 
-            function clearForm() {
-                document.getElementById("txtBarcode").value = "";
-                document.getElementById("txtRefNo").value = "";
-                document.getElementById("txtProdCode").value = "";
-                document.getElementById("txtFileNo").value = "";
-                document.getElementById("selectLocation").value = 0;
-                document.getElementById("selectReason").value = 0;
-                document.getElementById("txtBundleNo").value = "";
-                document.getElementById("txtQty").value = 0;
-                document.getElementById("txtQtyOut").value = 0;
-                document.getElementById("btnSend").disabled = true;
-            }
-
             $('#btnScan').click(function () {
                 $('#modal_scan').modal('show');
 
@@ -376,7 +377,7 @@
                        document.getElementById("txtRefNo").value = subdetails[0].referenceno;
                        document.getElementById("txtProdCode").value = subdetails[0].prodcode;
                        document.getElementById("txtFileNo").value = subdetails[0].filenumber;
-                       document.getElementById("txtBundleNo").value = subdetails[0].bundlenumber;
+                       //document.getElementById("txtBundleNo").value = subdetails[0].bundlenumber;
                        //document.getElementById("txtLocID").value = subdetails[0].locationcode;
                        document.getElementById("txtQty").value = subdetails[0].quantity;
                        $('#btnSend').prop("disabled", false);
@@ -391,7 +392,7 @@
                    document.getElementById("txtRefNo").value = "";
                    document.getElementById("txtProdCode").value = "";
                    document.getElementById("txtFileNo").value = "";
-                   document.getElementById("txtBundleNo").value = "";
+                   //document.getElementById("txtBundleNo").value = "";
                    document.getElementById("txtLocID").value = "";
                    document.getElementById("txtQty").value = 0;
                    

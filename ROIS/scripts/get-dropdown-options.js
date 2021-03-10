@@ -1,10 +1,6 @@
 ﻿locationDropDownReceiving();
 locationDropDownOutgoing();
 
-if (!localStorage && !sessionStorage) {
-    window.location.href = 'Login.aspx';
-}
-
 function locationDropDownReceiving() {
     let currentUserId = sessionStorage.getItem("userId");
     let data = JSON.stringify({ userId: currentUserId, transactionMode: 1 });

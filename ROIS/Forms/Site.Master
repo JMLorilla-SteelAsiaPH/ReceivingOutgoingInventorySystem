@@ -360,7 +360,7 @@
     </div>
 
     <!--end::Modal-->
-
+        <script src="../scripts/session.js"></script>
         <script>
             $(document).ready(function () {
                 //$('luser').val()

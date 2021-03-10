@@ -80,6 +80,7 @@
     <Content Include="Forms\Login.aspx" />
     <Content Include="Forms\Mill_Inventory.aspx" />
     <Content Include="Forms\ROISWebService.asmx" />
+    <Content Include="Forms\ScanList.aspx" />
     <Content Include="Forms\ScanOutgoing.aspx" />
     <Content Include="Forms\ScanReceiving.aspx" />
     <Content Include="Forms\ITRPostedDetails.aspx" />
@@ -100,6 +101,7 @@
     <Content Include="scripts\responsive.datatable.js" />
     <Content Include="scripts\scale.fix.js" />
     <Content Include="scripts\get-dropdown-options.js" />
+    <Content Include="scripts\session.js" />
     <Content Include="scripts\webfont.js" />
     <Content Include="vendors\assets\app\js\dashboard.js" />
     <Content Include="vendors\assets\app\js\dashboard.min.js" />
@@ -1378,6 +1380,13 @@
     <Compile Include="Forms\ROISWebService.asmx.cs">
       <DependentUpon>ROISWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\ScanList.aspx.cs">
+      <DependentUpon>ScanList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Forms\ScanList.aspx.designer.cs">
+      <DependentUpon>ScanList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Forms\ScanOutgoing.aspx.cs">
       <DependentUpon>ScanOutgoing.aspx</DependentUpon>
