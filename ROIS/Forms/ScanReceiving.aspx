@@ -153,6 +153,37 @@
                 }
             });
 
+           function loadGrid() {
+               let locationDesc = sessionStorage.getItem("userLocDesc");
+
+               $.ajax({
+                   url: 'ROISWebService.asmx/GenerateInventorySummaryDt',
+                   method: 'post',
+                   contentType: "application/json; charset=utf-8",
+                   dataType: 'json',
+                   data: JSON.stringify({ userLocationDesc: locationDesc }),
+                   success: function (data) {
+                       $('#dgrid').dataTable({
+                           responsive: true,
+                           data: data,
+                           bDestroy: true,
+                           columns: [
+                               { 'data': 'prod_code' },
+                               { 'data': 'location' },
+                               { 'data': 'quantity' },
+                               { 'data': 'weight' }
+                           ],
+
+                           order: [[0, "asc"]],
+
+                       });
+                       //$('#m_table_1').show();
+                       //$('#waitmeload').hide();
+                   } // end success
+
+               }); //end loadGrid
+           }
+
             function receiveData(argId, argRefNo, argProdCd, argFileNo, argQty, argLocId, argLastUser, argReasonId) {
                 var request = new XMLHttpRequest();
                 var data = JSON.stringify({ passId: argId, passRefNo: argRefNo, passProdCd: argProdCd, passFileNo: argFileNo, passQty: argQty, passLocId: argLocId, passLastUser: argLastUser, passReasonId: argReasonId });

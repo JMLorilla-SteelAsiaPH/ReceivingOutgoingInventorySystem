@@ -428,6 +428,79 @@ namespace ROIS.Forms
         }
 
         [WebMethod]
+        public void ScanListTbl()
+        {
+            List<ScanListModel> select_list = new List<ScanListModel>();
+
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("usp_barcode_scan_table", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        ScanListModel select = new ScanListModel();
+
+                        select.barcode = rdr["barcode_id"].ToString();
+                        select.location = rdr["location_desc"].ToString();
+                        select.reason = rdr["reason_desc"].ToString();
+
+                        select_list.Add(select);
+                    }
+                }
+                catch(SqlException ex)
+                {
+
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Context.Response.ContentType = "text/event-stream";
+            Context.Response.Write(js.Serialize(select_list));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
+        public void InsertScannnedBarcode(string scannedBarcode, int locId, int reasonId, string ipAdd)
+        {
+            using (SqlConnection con = new SqlConnection(rois_connstring))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("usp_barcode_scan_insert", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ScannedBarcode", scannedBarcode);
+                    cmd.Parameters.AddWithValue("@LocationID", locId);
+                    cmd.Parameters.AddWithValue("@ReasonID", reasonId);
+                    cmd.Parameters.AddWithValue("@IPAdd", ipAdd);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SqlException ex)
+                {
+                    
+                }
+                finally
+                {
+                    con.Close();
+                    con.Dispose();
+                }
+            }
+        }
+
+        [WebMethod]
         public void GetReasons(int userId, int transactionMode)
         {
             List<Reasons> select_list = new List<Reasons>();

@@ -193,8 +193,9 @@
                             <div class="m-menu__submenu ">
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
-                                    <li class="m-menu__item  m-menu__item" id="ScanOutgoingLink" aria-haspopup="true"><a href="ScanOutgoing.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Scan Outgoing</span></a></li>
+                                    <li class="m-menu__item  m-menu__item" aria-haspopup="true" id="ScanBarcodeLink"><a href="ScanList.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Scan Barcodes</span></a></li>
                                     <li class="m-menu__item  m-menu__item" aria-haspopup="true" id="ScanReceivingLink"><a href="ScanReceiving.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Scan Receiving</span></a></li>
+                                    <li class="m-menu__item  m-menu__item" id="ScanOutgoingLink" aria-haspopup="true"><a href="ScanOutgoing.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Scan Outgoing</span></a></li>
                                     <li class="m-menu__item  m-menu__item" aria-haspopup="true" id="ScanReceivingLink"><a href="HallTransfer.aspx" class="m-menu__link "><span class="m-menu__item-here"></span><span class="m-menu__link-text">Hall Transfer</span></a></li>
                                 </ul>
                             </div>

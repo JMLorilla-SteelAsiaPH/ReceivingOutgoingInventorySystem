@@ -1432,6 +1432,7 @@
     <Compile Include="Models\Outgoing.cs" />
     <Compile Include="Models\PostedDetailsTable.cs" />
     <Compile Include="Models\Reasons.cs" />
+    <Compile Include="Models\ScanListModel.cs" />
     <Compile Include="Models\UserClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
